@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">Stranded</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_lunch">Stranded</string>
+    <string name="exit">Exit</string>
+    <string name="options">Options</string>
+    <string name="score">Score</string>
+    <string name="new_game">New Game</string>
+    <string name="imageview_descript">Error :(</string>
+
+</resources>

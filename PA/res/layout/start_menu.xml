@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4D4D4D"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/bStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/new_game"
+        android:textSize="24sp"
+        android:background="@drawable/button"
+        android:textColor="#000000"
+        android:width="192dp"
+        android:height="48dp" />
+
+    <View android:layout_width="fill_parent"
+        android:layout_height="10dp"/>
+    
+    <Button
+        android:id="@+id/bScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/score"
+        android:textSize="24sp"
+        android:background="@drawable/button"
+        android:textColor="#4D4D4D"
+        android:width="192dp"
+        android:height="48dp" />
+    
+    <View android:layout_width="fill_parent"
+        android:layout_height="10dp"/>
+    
+    <Button
+        android:id="@+id/bOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/options"
+        android:textSize="24sp"
+        android:background="@drawable/button"
+        android:textColor="#4D4D4D"
+        android:width="192dp"
+        android:height="48dp" />
+
+    <View android:layout_width="fill_parent"
+        android:layout_height="10dp"/>
+    
+    <Button
+        android:id="@+id/bExit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/exit"
+        android:textSize="24sp"
+        android:background="@drawable/button"
+        android:textColor="#000000"
+        android:width="192dp"
+        android:height="48dp" />
+
+</LinearLayout>
