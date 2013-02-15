@@ -1,15 +1,15 @@
 package com.brogames.bro;
 
-import com.brogames.bro.objecttypes.ObjectType;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import com.brogames.bro.objecttypes.ObjectType;
+
 public class ImageGetter {
 
-	private static Bitmap objBitmap, itemBitmap, bitmap;
+	private static Bitmap objBitmap, itemBitmap;
 	private static int bw, bh;
 
 	public ImageGetter(Context context, Bundle boardSize) {
@@ -29,6 +29,8 @@ public class ImageGetter {
 	public static Bitmap getImage(boolean isItem, int type, int frame){
 		int row, col;
 		
+		Bitmap bitmap = null;
+		String key;
 		if (isItem){
 			type -= ObjectType.FIRST_GRID;
 			row = (int) Math.ceil(type/10);
@@ -38,6 +40,7 @@ public class ImageGetter {
 			}else
 				col = type-row*10+frame-1;
 			bitmap = itemBitmap;
+			key = "item_" +type + "_"+ frame;
 		}else{
 			row = (int) Math.ceil(type/30);
 			if (row*30 == type){
@@ -46,9 +49,10 @@ public class ImageGetter {
 			}else
 				col = type-row*30+frame-1;
 			bitmap = objBitmap;
+			key = "obj_" + type + "_"+ frame;
 		}
 		Bitmap bmp = null;
-		String id = Integer.toString(type+frame);
+		String id = key;
 		if (MemoryCache.get(id) == null){
 				MemoryCache.put(id,Bitmap.createBitmap(bitmap, bw*col, bh * row, bw, bh));
 			bmp = MemoryCache.get(id);
