@@ -122,6 +122,9 @@ public class Interact extends Popup {
 	}
 	
 	public void consequences(){
+		if(objectLayer[interactX][interactY].getObject() == null)
+			return;
+			
 		consequences = bag.getConsequencesData(objectLayer[interactX][interactY].getObject().getObjectType());
 		if (consequences != null){
 		if (consequences[0] == 1){
@@ -131,9 +134,10 @@ public class Interact extends Popup {
 			objectLayer[interactX][interactY].removeObject();
 		}
 		
-		if (consequences[1] > 0)
+		if (consequences[1] > 0){
 			bag.insertItem(ObjectGetter.setItem(consequences[1]));
 			setPopup(3);
+		}
 		close();
 		}
 	}
