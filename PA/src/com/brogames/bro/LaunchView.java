@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Interact;
@@ -197,6 +198,22 @@ public class LaunchView extends GameView {
 		}
 	}
 
+	protected void onSwipeRight() {
+    	Log.e("InputHandler", "Right swipe");
+    }
+
+	protected void onSwipeLeft() {
+    	Log.e("InputHandler", "Left swipe");
+    }
+
+	protected void onSwipeTop() {
+    	Log.e("InputHandler", "Top swipe");
+    }
+
+	protected void onSwipeBottom() {
+    	Log.e("InputHandler", "Bottom swipe");
+    }
+	
 	public int getIntData(String key){
 		if(key.equals("playerPosX"))
 			return player.getBoardIndexX();
