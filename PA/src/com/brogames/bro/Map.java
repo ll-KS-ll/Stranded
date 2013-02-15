@@ -13,26 +13,25 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class Map extends Activity {
-	
+
 	private static int layerCounter;
 	private static String FILENAME, line, res;
 	private static boolean mapValue = false;
 	private static Layer[] layer = new Layer[4];
 
 	public static void loadMap(Context context, String file, boolean first, Bundle sizes) {
-		FILENAME = file + ".tmx";
 		res = "";
 		layerCounter = 0;
-
-		try {
-			
-			if(first){
-				Log.d("LoadMap", "Start tmx");
+		FILENAME = "section" + file + ".tmx";
+		
+		try{
+			if (first){
+				
 				InputStream in = context.getResources().getAssets().open(FILENAME);
 				InputStreamReader input = new InputStreamReader(in);
 				BufferedReader buffreader = new BufferedReader(input);
 				while ((line = buffreader.readLine()) != null) {
-					if (line.equals("</data>")){
+					if (line.equals("</data>")) {
 						layer[layerCounter] = new Layer(res, sizes);
 						layerCounter++;
 						mapValue = false;
@@ -50,29 +49,29 @@ public class Map extends Activity {
 				BufferedReader buffreader = new BufferedReader(input);
 				res = buffreader.readLine();
 				in.close();
-				
+
 				StringTokenizer tokens = new StringTokenizer(res, "|");
 				for (int n = 0; n < 4; n++) {
 					layer[n] = new Layer(tokens.nextToken(), sizes);
 				}
 			}
-			
-		} catch (IOException e) { 
-			Log.e("LoadMap", "Couldn't load map :(  " + e );
+		}catch(IOException ex){
+			Log.e("Map", "Couldn't open section. \n" + ex);
 		}
+		
+		
 	}
-	
-	public static Layer[] getLayers(){
+
+	public static Layer[] getLayers() {
 		return layer;
-		
 	}
-	
-	public static Layer getLayer(int layerIndex){
+
+	public static Layer getLayer(int layerIndex) {
 		return layer[layerIndex];
-		
+
 	}
-	
-	public static int MapLenght(){
+
+	public static int MapLenght() {
 		return layerCounter;
 	}
 }

@@ -1,6 +1,7 @@
 package com.brogames.bro;
 
-import android.annotation.SuppressLint;
+import java.io.BufferedWriter;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +18,6 @@ import com.brogames.bro.popups.Popup;
 import com.core.ks.GameView;
 import com.core.ks.InputObject;
 
-@SuppressLint("ViewConstructor")
 public class LaunchView extends GameView {
 
 	public static final int MAP_WIDTH = 60;
@@ -40,6 +40,10 @@ public class LaunchView extends GameView {
 	private Popup popup;
 	private boolean popIsUp = false;
 	
+	public LaunchView(Context context) {
+		super(context);
+	}
+	
 	// Constructor
 	public LaunchView(Context context, Bundle bundle) {
 		super(context);
@@ -59,7 +63,7 @@ public class LaunchView extends GameView {
 		getImage = new ImageGetter(context, sizes);
 
 		section = bundle.getString("section");
-		Map.loadMap(context, "section" + section, bundle.getBoolean("first"), sizes);
+		Map.loadMap(context, section, bundle.getBoolean("first"), sizes);
 		layer = Map.getLayers();
 		backgroundLayer = layer[0].getTiles();
 		objectLayer = layer[1].getTiles();
@@ -93,7 +97,7 @@ public class LaunchView extends GameView {
 		
 		switch (popup.checkPopup()){
 			case 1: // Opens interact
-				popup = new Interact(player.getBag(), sizes, objectLayer, player);
+				popup = new Interact(player.getBag(), sizes, objectLayer, topLayer, player);
 				break;
 			case 2: // Opens inventory for equipping
 				popup = new Inventory(getResources(), player.getBag(), sizes, itemLayer[player.getBoardIndexX()][player.getBoardIndexY()]);
@@ -181,7 +185,7 @@ public class LaunchView extends GameView {
 			if (x >= 0 && x < MAP_WIDTH && y >=  0 && y < MAP_HEIGHT)
 				if (!objectLayer[x][y].isObstacle()) 
 					if(x == player.getBoardIndexX() && y == player.getBoardIndexY()){
-						popup = new Interact(player.getBag(), sizes, objectLayer, player);
+						popup = new Interact(player.getBag(), sizes, objectLayer, topLayer, player);
 					}else{
 						Point target = new Point(x, y);
 						player.move(itemLayer, target);
@@ -212,14 +216,6 @@ public class LaunchView extends GameView {
 			return player.getBagStringData();
 		if(key.equals("section"))
 			return section;
-		if(key.equals("save_section_bg"))
-			return saveBackgroundLayer();
-		if(key.equals("save_section_object"))
-			return saveObjectLayer();
-		if(key.equals("save_section_item"))
-			return saveItemLayer();
-		if(key.equals("save_section_top"))
-			return saveTopLayer();
 		return "";
 	}
 	
@@ -229,89 +225,26 @@ public class LaunchView extends GameView {
 		return false;
 	}
 	
-	public String saveBackgroundLayer(){
-		String s = "";
-		for (int y = 0; y < MAP_HEIGHT; y++) {
-			for (int x = 0; x < MAP_WIDTH; x++) {
-				s += backgroundLayer[x][y].getObjectType() + ",";
-			}
-		}
-		s = s.substring(0, s.length()-1);
-		s += "|";
-		return s;
-	}
-	
-	public String saveObjectLayer(){
-		String s = "";
-		for (int y = 0; y < MAP_HEIGHT; y++) {
-			for (int x = 0; x < MAP_WIDTH; x++) {
-				s += objectLayer[x][y].getObjectType() + ",";
-			}
-		}
-		s = s.substring(0, s.length()-1);
-		s += "|";
-		return s;
-	}
-	
-	public String saveItemLayer(){
-		String s = "";
-		for (int y = 0; y < MAP_HEIGHT; y++) {
-			for (int x = 0; x < MAP_WIDTH; x++) {
-				s += itemLayer[x][y].getObjectType() + ",";
-			}
-		}
-		s = s.substring(0, s.length()-1);
-		s += "|";
-		return s;
-	}
-	
-	public String saveTopLayer(){
-		String s = "";
-		for (int y = 0; y < MAP_HEIGHT; y++) {
-			for (int x = 0; x < MAP_WIDTH; x++) {
-				s += topLayer[x][y].getObjectType() + ",";
-			}
-		}
-		s = s.substring(0, s.length()-1);
-		return s;
-	}
-	
-	// Old file saving
-	public String getSection(){
-		String s = "";
+	public void saveFile(BufferedWriter writer){
+
 		for (int n = 0; n < 4; n++){
-			if (n>0)
-				s += "|";
-			for (int y = 0; y < MAP_HEIGHT; y++) {
-				for (int x = 0; x < MAP_WIDTH; x++) {
-					if (n==0)
-					s += backgroundLayer[x][y].getObjectType() + ",";
-					if(n==1)
-						s += objectLayer[x][y].getObjectType() + ",";
-					if(n==2)
-						s += itemLayer[x][y].getObjectType() + ",";
-					if(n==3)
-						s += topLayer[x][y].getObjectType() + ",";
+			try{
+				if (n>0)
+					writer.write("|");
+				for (int y = 0; y < MAP_HEIGHT; y++) {
+					for (int x = 0; x < MAP_WIDTH; x++) {
+						if (n==0)
+							writer.write(backgroundLayer[x][y].getObjectType() + ",");
+						if(n==1)
+							writer.write(objectLayer[x][y].getObjectType() + ",");
+						if(n==2)
+							writer.write(itemLayer[x][y].getObjectType() + ",");
+						if(n==3)
+							writer.write(topLayer[x][y].getObjectType() + ",");
+					}
 				}
-			}
+			}catch(Exception ex){}
 		}
-		
-		return s.substring(0, s.length()-1);
-	}
-	
-	// Failed file saving try
-	public String saveSectionToFile(int n, int x, int y){
-		switch(n){
-		case 0:
-			return backgroundLayer[x][y].getObjectType() + ",";	
-		case 1:
-			return objectLayer[x][y].getObjectType() + ",";
-		case 2:
-			return itemLayer[x][y].getObjectType() + ",";
-		case 3:
-			return topLayer[x][y].getObjectType() + ",";
-		}
-		return "";
 	}
 	
 	public Bundle getSizesBundle(){

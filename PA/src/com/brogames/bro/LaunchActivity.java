@@ -53,33 +53,15 @@ public class LaunchActivity extends GameActivity {
 			editor.putString("bag", view.getStringData("bag"));
 			editor.putString("section", view.getStringData("section"));
 			editor.commit();
-			// Whole section
-			/*String filename = "section" + view.getStringData("section");
-			FileOutputStream outputStream;
-			try {
-			  outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-			  outputStream.write(view.getStringData("save_section").getBytes());
-			  outputStream.close();
-			} catch (Exception e) {
-			  e.printStackTrace();
-			}*/
-			
-			String filename = "section" + view.getStringData("section");
+			//Whole section
+			String filename = "section" + view.getStringData("section") + ".tmx";
 			try {
 				FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);;
 				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
 				BufferedWriter writer = new BufferedWriter(outputStreamWriter);
 				
-				Log.d(this.toString(), "Start saving layers");
-				writer.write(view.getStringData("save_section_bg"));
-				Log.d(this.toString(), "Background layer saved");
-				writer.write(view.getStringData("save_section_object"));
-				Log.d(this.toString(), "Object layer saved");
-				writer.write(view.getStringData("save_section_item"));
-				Log.d(this.toString(), "Item layer saved");
-				writer.write(view.getStringData("save_section_top"));
-				Log.d(this.toString(), "Top layer saved");
-				
+				Log.d(this.toString(), "Start saving");
+				view.saveFile(writer);
 				Log.d(this.toString(), "Done saving");
 				
 				writer.close();
@@ -90,39 +72,6 @@ public class LaunchActivity extends GameActivity {
 			} catch (Exception e) {
 				  e.printStackTrace();
 			}
-			/*String filename = "section" + view.getStringData("section");
-			
-			try {
-			  
-				FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);;
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-				BufferedWriter writer = new BufferedWriter(outputStreamWriter);
-			  
-				for (int n = 0; n < 4; n++){
-					for (int y = 0; y < LaunchView.MAP_HEIGHT; y++) {
-						for (int x = 0; x < LaunchView.MAP_WIDTH; x++) {
-							switch(n){
-							case 0:
-								writer.write(view.getStringData("save_section"));
-							case 1:
-								writer.write(view.getStringData("save_section"));
-							case 2:
-								writer.write(view.getStringData("save_section"));
-							case 3:
-								writer.write(view.getStringData("save_section"));
-							}
-						}
-					}
-					if(n < 4)
-						outputStream.write("|".getBytes());
-					}
-			  
-				writer.close();
-				outputStreamWriter.close();
-				outputStream.close();
-			} catch (Exception e) {
-			  e.printStackTrace();
-			}*/
 		}
 	}
 }

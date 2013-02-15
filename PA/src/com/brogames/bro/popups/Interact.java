@@ -24,12 +24,12 @@ public class Interact extends Popup {
 	@SuppressWarnings("unused")
 	private RectF bounds, borderBounds, inputBounds;
 	private Bag bag;
-	private Tile[][] objectLayer;
+	private Tile[][] objectLayer, topLayer;
 	private int boardIndexX,boardIndexY;
 	private int[] consequences;
 	private int interactX, interactY;
 
-	public Interact(Bag bag, Bundle sizes, Tile[][] objectLayer, Player player) {
+	public Interact(Bag bag, Bundle sizes, Tile[][] objectLayer, Tile[][] topLayer, Player player) {
 		super(); // Call super or die!
 		
 		this.bag = bag;
@@ -41,6 +41,7 @@ public class Interact extends Popup {
 		objWidth = 2 * boardWidth;
 		objHeight = 2 * boardHeight;
 		this.objectLayer = objectLayer;
+		this.topLayer = topLayer;
 		
 		boardIndexX = player.getBoardIndexX();
 		boardIndexY = player.getBoardIndexY();
@@ -126,7 +127,7 @@ public class Interact extends Popup {
 		if (consequences[0] == 1){
 			objectLayer[interactX][interactY].removeObject();
 		}else if (consequences[0] == 2){
-			objectLayer[interactX][interactY-1].removeObject();
+			topLayer[interactX][interactY-1].removeObject();
 			objectLayer[interactX][interactY].removeObject();
 		}
 		

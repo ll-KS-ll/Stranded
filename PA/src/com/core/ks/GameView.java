@@ -1,6 +1,8 @@
 package com.core.ks;
 
+import java.io.BufferedWriter;
 import java.util.concurrent.ArrayBlockingQueue;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -179,12 +181,20 @@ public class GameView extends SurfaceView {
 		return "";
 	}
 	
-	/** public int getBooleanData(String key)
+	/** public int getBooleanData(String key)<p>
 	 * 	<br>
 	 *  Get booleans to save
 	 *  @param key - key for the value to save
 	 *  @return value to save*/
 	public boolean getBooleanData(String key){
 		return false;
+	}
+	
+	/** Save the data to an file that can be loaded when application restarts
+	 * 
+	 * @param writer - A BufferedWriter to write data to an file
+	 */
+	public void saveFile(BufferedWriter writer){
+		
 	}
 }
