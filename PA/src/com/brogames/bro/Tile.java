@@ -54,6 +54,7 @@ public class Tile {
 
 	public void removeObject() {
 		object = null;
+		objectType = 0;
 	}
 
 	public Object getObject() {
