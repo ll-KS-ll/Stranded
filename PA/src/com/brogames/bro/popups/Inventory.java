@@ -15,6 +15,7 @@ import com.brogames.bro.R;
 import com.brogames.bro.Tile;
 import com.brogames.bro.objecttypes.items.CraftSystem;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
 
 public class Inventory extends Popup {
 

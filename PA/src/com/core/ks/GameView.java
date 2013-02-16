@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
 public class GameView extends SurfaceView {
 
 	// Core stuff
@@ -24,13 +25,18 @@ public class GameView extends SurfaceView {
 	private ArrayBlockingQueue<InputObject> inputQueue = new ArrayBlockingQueue<InputObject>(20);
 	private Object inputQueueMutex = new Object();
 	protected float eventX, eventY, eventLX, eventLY = -1;
-
+	// Pop up
+	protected Popup popup;
+	protected boolean popIsUp = false;
+	
 	public GameView(Context context) {
 		super(context);
 		setKeepScreenOn(true);
 		holder = getHolder(); // SurfaceHolder
 		this.setOnTouchListener(new InputHandler(this)); // Input
 		background.setColor(Color.BLACK);
+		popup = new Popup();
+		popup.close();
 	}
 
 	/** Update game logic*/
@@ -48,8 +54,18 @@ public class GameView extends SurfaceView {
 		case RESTART:
 			break;
 		}
+		
+		popIsUp = popup.getState();
+		if (popIsUp)
+			popup.tick();
+		
+		checkPopup();
 	}
 
+	public void checkPopup(){
+		
+	}
+	
 	/** Draw graphics
 	 * @param canvas - canvas to paint graphics on 
 	 */
@@ -87,8 +103,11 @@ public class GameView extends SurfaceView {
 	 * @param canvas - canvas to shown on screen
 	 */
 	public void postCanvas(Canvas canvas){
-		if (holder.getSurface().isValid())
+		if (holder.getSurface().isValid()){
+			if (popIsUp)
+				popup.render(canvas);
 			holder.unlockCanvasAndPost(canvas); // Show the painted canvas
+		}
 	}
 	
 	//---INPUT---
@@ -109,8 +128,7 @@ public class GameView extends SurfaceView {
 					InputObject input = inputQueue.take();
 					processMotionEvent(input);
 					input.returnToPool();
-				} catch (InterruptedException e) {
-				}
+				} catch (InterruptedException e) {}
 			}
 		}
 	}
@@ -119,10 +137,13 @@ public class GameView extends SurfaceView {
 	 *  
 	 *  Process inputs made by user
 	 *  
-	 *  @param input takes an InputObject
+	 *  @param input - An InputObject with the input data.
 	 */
 	protected void processMotionEvent(InputObject input) {
-
+		if (popIsUp) {
+			popup.processMotionEvent(input);
+			input.remove();
+		}
 	}
 	
 	/** Pause the game until public void resume() is called*/

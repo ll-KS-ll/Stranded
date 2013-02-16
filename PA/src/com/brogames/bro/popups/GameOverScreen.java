@@ -2,6 +2,7 @@ package com.brogames.bro.popups;
 
 import com.brogames.bro.LaunchView;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

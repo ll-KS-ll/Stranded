@@ -12,6 +12,7 @@ import com.brogames.bro.Player;
 import com.brogames.bro.Tile;
 import com.brogames.bro.objecttypes.ObjectGetter;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
 
 public class Interact extends Popup {
 	
@@ -104,7 +105,7 @@ public class Interact extends Popup {
 		//inputBounds = new RectF((int) (input.x - 3),(int) (input.y - 3),(int) (input.x + 3), (int) (input.y + 3));
 		
 		if (input.x >= x1 && input.x <= x2 && input.y <= y1 && input.y >= y2) { 
-			setPopup(2);
+			setPopup(6);
 			close();
 		}else if (bag.getEquipedItem() != null){
 		if (input.x >= screenWidth/2 - objWidth/2 && input.x <= screenWidth/2 + objWidth && input.y <= screenHeight/2 - boardHeight && input.y >= screenHeight/2 - boardHeight*3) //Up

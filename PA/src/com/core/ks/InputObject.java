@@ -4,23 +4,26 @@ import java.util.concurrent.ArrayBlockingQueue;
 import android.view.MotionEvent;
 
 public class InputObject {
+	
 	public static final byte EVENT_TYPE_TOUCH = 1;
 	public static final int ACTION_TOUCH_DOWN = 2;
 	public static final int ACTION_TOUCH_MOVE = 3;
 	public static final int ACTION_TOUCH_UP = 4;
+	
 	public ArrayBlockingQueue<InputObject> pool;
 	public byte eventType;
 	public long time;
 	public int action;
-	public int keyCode;
 	public float x;
 	public float y;
-
+	public boolean isRemoved;
+	
 	public InputObject(ArrayBlockingQueue<InputObject> pool) {
 		this.pool = pool;
 	}
 
 	public void useEvent(MotionEvent event) {
+		isRemoved = false;
 		eventType = EVENT_TYPE_TOUCH;
 		int a = event.getAction();
 		switch (a) {
@@ -41,6 +44,10 @@ public class InputObject {
 		y = event.getY();
 	}
 
+	public void remove(){
+		isRemoved = true;
+	}
+	
 	public void returnToPool() {
 		pool.add(this);
 	}

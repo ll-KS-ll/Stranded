@@ -2,6 +2,8 @@ package com.brogames.bro.popups;
 
 import java.util.StringTokenizer;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
