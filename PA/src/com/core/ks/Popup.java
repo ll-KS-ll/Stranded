@@ -25,7 +25,7 @@ public class Popup {
 	 */
 	public Popup(){
 		color.setARGB(180, 0, 0, 0);
-		setPopup(0);
+		setPopup(-1);
 		state = true;
 	}
 	
@@ -74,7 +74,6 @@ public class Popup {
 	 */
 	public void close(){
 		state = false;
-		popupToOpen = -1;
 	}
 	
 	/** public void render(Canvas canvas)<p>
