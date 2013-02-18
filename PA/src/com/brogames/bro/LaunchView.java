@@ -1,6 +1,7 @@
 package com.brogames.bro;
 
 import java.io.BufferedWriter;
+import java.util.StringTokenizer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,7 +26,7 @@ public class LaunchView extends GameView {
 
 	private int tileWidth, tileHeight;
 	private Bundle sizes;
-	private String section; 
+	private String current_section, new_section; 
 	private Player player;
 	private Camera camera;
 	private Layer[] layer;
@@ -62,8 +63,8 @@ public class LaunchView extends GameView {
 		
 		getImage = new ImageGetter(context, sizes);
 
-		section = bundle.getString("section");
-		Map.loadMap(context, section, bundle.getBoolean("first"), sizes);
+		current_section = new_section = bundle.getString("section");
+		Map.loadMap(context, current_section, sizes);
 		layer = Map.getLayers();
 		backgroundLayer = layer[0].getTiles();
 		objectLayer = layer[1].getTiles();
@@ -119,22 +120,23 @@ public class LaunchView extends GameView {
 		}
 		
 		if(player.changeSection()){
-			int x = Integer.valueOf(section.substring(0, 1));
-			int y = Integer.valueOf(section.substring(2, 3));
-			if(player.getBoardIndexX() == 0){
+			StringTokenizer token = new StringTokenizer(current_section, "_");
+			int x = Integer.valueOf(token.nextToken());
+			int y = Integer.valueOf(token.nextToken());
+			if(player.getBoardIndexX() <= 1){
 				x--;
 				player.setBoardIndexX(MAP_WIDTH - 2);
-			}else if(player.getBoardIndexX() == MAP_WIDTH - 1){
+			}else if(player.getBoardIndexX() >= MAP_WIDTH - 2){
 				x++;
 				player.setBoardIndexX(1);
-			}else if(player.getBoardIndexY() == 0){
+			}else if(player.getBoardIndexY() <= 1){
 				y--;
 				player.setBoardIndexY(MAP_HEIGHT - 2);
-			}else if(player.getBoardIndexY() == MAP_HEIGHT - 1){
+			}else if(player.getBoardIndexY() >= MAP_HEIGHT - 2){
 				y++;
 				player.setBoardIndexY(1);
 			}
-			section = x + "_" + y;
+			new_section = x + "_" + y;
 			player.sectionChangeProcessed();
 			restart();
 		}
@@ -214,8 +216,10 @@ public class LaunchView extends GameView {
 	public String getStringData(String key){
 		if(key.equals("bag"))
 			return player.getBagStringData();
-		if(key.equals("section"))
-			return section;
+		if(key.equals("current_section"))
+			return current_section;
+		if(key.equals("new_section"))
+			return new_section;
 		return "";
 	}
 	

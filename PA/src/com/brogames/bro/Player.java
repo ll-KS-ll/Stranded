@@ -1,11 +1,13 @@
 package com.brogames.bro;
 
 import java.util.LinkedList;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
 
+import com.brogames.bro.objecttypes.ObjectType;
 import com.brogames.bro.objecttypes.items.Item;
 import com.brogames.bro.popups.Popup;
 
@@ -171,11 +173,10 @@ public class Player {
 						bag.insertItem(pickup);
 						popup.setPopup(3);
 						itemLayer[boardIndexX][boardIndexY].removeItem();
-					}
-					/*}else{
+					}else{
 						if(pickup.getObjectType() == ObjectType.PORTAL)
 							changeSection = true;
-					}*/
+					}
 				}
 				
 			}

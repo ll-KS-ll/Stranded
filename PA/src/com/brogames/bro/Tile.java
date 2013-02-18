@@ -32,6 +32,7 @@ public class Tile {
 
 	public void addItem(int objectType) {
 		item = ObjectGetter.setItem(objectType);
+		this.objectType = objectType;
 	}
 
 	public void removeItem() {
@@ -86,6 +87,8 @@ public class Tile {
 		if (item != null) {
 			if (item.getBmp() != null)
 				canvas.drawBitmap(item.getBmp(), xPos, yPos, null);
+			else
+				canvas.drawRect(xPos, yPos, xPos+tileWidth, yPos+tileHeight, item.getColor());
 		}
 
 		if (wayPoint) {

@@ -51,10 +51,10 @@ public class LaunchActivity extends GameActivity {
 			editor.putInt("thirst", view.getIntData("thirst"));
 			editor.putInt("equip", view.getIntData("equip"));
 			editor.putString("bag", view.getStringData("bag"));
-			editor.putString("section", view.getStringData("section"));
+			editor.putString("section", view.getStringData("new_section"));
 			editor.commit();
 			//Whole section
-			String filename = "section" + view.getStringData("section") + ".tmx";
+			String filename = "section" + view.getStringData("current_section") + ".tmx";
 			try {
 				FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);;
 				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
