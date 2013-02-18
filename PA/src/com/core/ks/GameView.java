@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -124,6 +125,30 @@ public class GameView extends SurfaceView {
 	protected void processMotionEvent(InputObject input) {
 
 	}
+	
+	/**Handle swipe gesture to the right. 
+	 */
+	protected void onSwipeRight() {
+    	Log.e("InputHandler", "Right swipe");
+    }
+
+	/**Handle swipe gesture to the right. 
+	 */
+	protected void onSwipeLeft() {
+    	Log.e("InputHandler", "Left swipe");
+    }
+
+	/**Handle swipe gesture to the right. 
+	 */
+	protected void onSwipeTop() {
+    	Log.e("InputHandler", "Top swipe");
+    }
+
+	/**Handle swipe gesture to the right. 
+	 */
+	protected void onSwipeBottom() {
+    	Log.e("InputHandler", "Bottom swipe");
+    }
 	
 	/** Pause the game until public void resume() is called*/
 	public void pause(){
