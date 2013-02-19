@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.brogames.bro.objecttypes.items.Item;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
 
 public class PickupAnimation extends Popup {
 	

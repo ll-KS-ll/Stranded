@@ -25,8 +25,9 @@ public class LaunchActivity extends GameActivity {
 		bundle.putString("bag", settings.getString("bag", ""));
 		bundle.putString("section", settings.getString("section", "0_0"));
 		bundle.putBoolean("first", settings.getBoolean("first", true));
-		bundle.putBoolean("menuIsOpen", settings.getBoolean("menuIsOpen", false));
-		
+		bundle.putBoolean("menuIsOpen",
+				settings.getBoolean("menuIsOpen", false));
+
 		view = new LaunchView(this, bundle);
 		setContentView(view);
 		gameloop = new GameLoop(this, view);
@@ -40,38 +41,35 @@ public class LaunchActivity extends GameActivity {
 	}
 
 	public void save() {
-		if (!wasTerminated) {
-			// Small values
-			editor = settings.edit();
-			editor.putBoolean("first", false);
-			editor.putBoolean("menuIsOpen", view.getBooleanData("menuIsOpen"));
-			editor.putInt("playerPosX", view.getIntData("playerPosX"));
-			editor.putInt("playerPosY", view.getIntData("playerPosY"));
-			editor.putInt("hunger", view.getIntData("hunger"));
-			editor.putInt("thirst", view.getIntData("thirst"));
-			editor.putInt("equip", view.getIntData("equip"));
-			editor.putString("bag", view.getStringData("bag"));
-			editor.putString("section", view.getStringData("new_section"));
-			editor.commit();
-			//Whole section
+		// Small values
+		editor = settings.edit();
+		editor.putBoolean("first", false);
+		editor.putBoolean("menuIsOpen", view.getBooleanData("menuIsOpen"));
+		editor.putInt("playerPosX", view.getIntData("playerPosX"));
+		editor.putInt("playerPosY", view.getIntData("playerPosY"));
+		editor.putInt("hunger", view.getIntData("hunger"));
+		editor.putInt("thirst", view.getIntData("thirst"));
+		editor.putInt("equip", view.getIntData("equip"));
+		editor.putString("bag", view.getStringData("bag"));
+		editor.putString("section", view.getStringData("new_section"));
+		editor.commit();
+		// Whole section
+		try {
 			String filename = "section" + view.getStringData("current_section") + ".tmx";
-			try {
-				FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);;
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-				BufferedWriter writer = new BufferedWriter(outputStreamWriter);
+			FileOutputStream outputStream = openFileOutput(filename, Context.MODE_PRIVATE);;
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+			BufferedWriter writer = new BufferedWriter(outputStreamWriter);
 				
-				Log.d(this.toString(), "Start saving");
-				view.saveFile(writer);
-				Log.d(this.toString(), "Done saving");
+			Log.d(this.toString(), "Start saving");
+			view.saveFile(writer);
+			Log.d(this.toString(), "Done saving");
 				
-				writer.close();
-				outputStreamWriter.close();
-				outputStream.close();
-				
-				Log.d(this.toString(), "Cleaned up buffers");
-			} catch (Exception e) {
-				  e.printStackTrace();
-			}
+			writer.close();
+			outputStreamWriter.close();
+			outputStream.close();
+			Log.d(this.toString(), "Cleaned up buffers");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

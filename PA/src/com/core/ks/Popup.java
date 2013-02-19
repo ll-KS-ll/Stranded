@@ -1,6 +1,5 @@
-package com.brogames.bro.popups;
+package com.core.ks;
 
-import com.core.ks.InputObject;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -19,14 +18,14 @@ public class Popup {
 	 *  		false - pop up is closed or should be closed	
 	 */
 	protected boolean state = false;
-	protected int popupToOpen = 0;
+	protected int popupToOpen = -1;
 	/** public Popup()<p>
 	 *  Initialize default pop up window. <br>
 	 *  Should always be called for every pop up.
 	 */
 	public Popup(){
 		color.setARGB(180, 0, 0, 0);
-		setPopup(0);
+		setPopup(-1);
 		state = true;
 	}
 	
@@ -52,19 +51,27 @@ public class Popup {
 		state = true;
 	}
 	
-	/** public void close()<p>
-	 *  Closes the pop up
-	 *  
+
+	//Change to better names if you like, I'm not happy with them :/ 
+	/**Set a specified pop up to be opened. 
+	 * 
+	 * @param popupValue - value for the pop up to open
 	 */
-	//Change to better names if you like, I'm not happy with them :/
-	public void setPopup(int open){//set equip true if you want to open inventory next time LaunchView runs
-		popupToOpen = open;
+	public void setPopup(int popupValue){//set equip true if you want to open inventory next time LaunchView runs
+		popupToOpen = popupValue;
 	}
 	
+	/**Check if there is a pop up to be opened.
+	 * 
+	 * @return popupToOpen - value for the pop up to open
+	 */
 	public int checkPopup (){//Used by LaunchView to check if inventory should be open or not
 		return popupToOpen;
 	}
 	
+	/** public void close()<p>
+	 *  Closes the pop up
+	 */
 	public void close(){
 		state = false;
 	}

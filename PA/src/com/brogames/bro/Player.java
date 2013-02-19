@@ -9,7 +9,7 @@ import android.os.Bundle;
 
 import com.brogames.bro.objecttypes.ObjectType;
 import com.brogames.bro.objecttypes.items.Item;
-import com.brogames.bro.popups.Popup;
+import com.core.ks.Popup;
 
 public class Player {
 

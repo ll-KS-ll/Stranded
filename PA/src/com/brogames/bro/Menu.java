@@ -1,7 +1,8 @@
 package com.brogames.bro;
 
-import com.brogames.bro.popups.Popup;
 import com.core.ks.InputObject;
+import com.core.ks.Popup;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
