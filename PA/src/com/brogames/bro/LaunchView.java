@@ -35,9 +35,7 @@ public class LaunchView extends GameView {
 	private ImageGetter getImage;
 	private Menu menu;
 	
-	public LaunchView(Context context) {
-		super(context);
-	}
+	public LaunchView(Context context) {super(context);}
 	
 	// Constructor
 	public LaunchView(Context context, Bundle bundle) {
@@ -122,10 +120,7 @@ public class LaunchView extends GameView {
 	}
 
 	// Input
-	protected void processMotionEvent(InputObject input) {
-		super.processMotionEvent(input);
-		if(input.isRemoved) //Check if the input already has been handled
-			return;
+	public void onClick(InputObject input) {
 		if(menu.isOpen()){
 			if(getHeight() - input.y < tileHeight || input.x < tileWidth*2 && input.y > getHeight() - tileHeight*3)
 				menu.processInput(input, popup);

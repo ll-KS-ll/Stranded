@@ -15,7 +15,7 @@ public class GameActivity extends Activity {
 	protected SharedPreferences settings;
 	protected SharedPreferences.Editor editor;
 	public static final String PATH = "GameScores";
-	protected boolean wasTerminated = false;
+	private boolean wasTerminated = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,8 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		save();
+		if(!wasTerminated)
+			save();
 	}
 
 	public void save(){}

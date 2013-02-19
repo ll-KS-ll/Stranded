@@ -27,7 +27,7 @@ public class GameView extends SurfaceView {
 	protected float eventX, eventY, eventLX, eventLY = -1;
 	// Pop up
 	protected Popup popup;
-	protected boolean popIsUp = false;
+	private boolean popIsUp = false;
 	
 	public GameView(Context context) {
 		super(context);
@@ -62,9 +62,8 @@ public class GameView extends SurfaceView {
 		checkPopup();
 	}
 
-	public void checkPopup(){
-		
-	}
+	/**Check if there is a pop up window to open.*/
+	public void checkPopup(){}
 	
 	/** Draw graphics
 	 * @param canvas - canvas to paint graphics on 
@@ -79,6 +78,7 @@ public class GameView extends SurfaceView {
 			holder.unlockCanvasAndPost(canvas); // Show the painted canvas
 		}
 	}
+	
 
 	/** Get if surface is ready to be used
 	 * @return boolean - returns true if surface is ready to be used, false otherwise.
@@ -89,6 +89,7 @@ public class GameView extends SurfaceView {
 		return false;
 	}
 	
+	
 	/** Get a canvas ready to be painted
 	 *	@param canvas - canvas to be readied for painting
 	 *	@return canvas - readied canvas to paint on
@@ -98,6 +99,7 @@ public class GameView extends SurfaceView {
 			canvas = holder.lockCanvas(); // Prepare canvas to be used
 		return canvas;
 	}
+	
 	
 	/** Show drawn graphics on screen
 	 * @param canvas - canvas to shown on screen
@@ -110,6 +112,10 @@ public class GameView extends SurfaceView {
 		}
 	}
 	
+	/**Feed inputs for later processing. 
+	 * @param input - InputObject to add to processing
+	 */
+	
 	//---INPUT---
 	public void feedInput(InputObject input) {
 		synchronized (inputQueueMutex) {
@@ -119,6 +125,7 @@ public class GameView extends SurfaceView {
 			}
 		}
 	}
+	
 
 	private void processInput() {
 		synchronized (inputQueueMutex) {
@@ -139,40 +146,35 @@ public class GameView extends SurfaceView {
 	 *  
 	 *  @param input - An InputObject with the input data.
 	 */
-	protected void processMotionEvent(InputObject input) {
+	private void processMotionEvent(InputObject input) {
 		if (popIsUp) {
 			popup.processMotionEvent(input);
-			input.remove();
+		}else{
+			onClick(input);
 		}
 	}
 	
+	/**Process what to do with touch inputs on the device's screen.
+	 * 
+	 * @param input - An InputObject with the input data.
+	 */
+	public void onClick(InputObject input){}
 	/** Pause the game until public void resume() is called*/
-	public void pause(){
-		state = PAUSED;
-	}
 	
+	public void pause(){state = PAUSED;}
 	/** Resumes the game from paused state*/
-	public void resume(){
-		state = RUNNING;
-	}
-	
+	public void resume(){state = RUNNING;}
 	/** Stops the game and quits*/
-	public void stop(){
-		state = STOP;
-	}
-	
+	public void stop(){state = STOP;}
 	/** Restarts the game*/
-	public void restart(){
-		state = RESTART;
-	}
+	public void restart(){state = RESTART;}
 	
 	/** Get in which state the game is
 	 * 	<br>
 	 *  Example: running or paused 
 	 *  @return Game state*/
-	public int getState(){
-		return state;
-	}
+	public int getState(){return state;}
+	
 	
 	/** public boolean terminate()
 	 * 	<br>
@@ -184,38 +186,35 @@ public class GameView extends SurfaceView {
 		return false;
 	}
 	
+	
 	/** public int getIntData(String key)
 	 * 	<br>
 	 *  Get integer values to save
 	 *  @param key - key for the value to save
 	 *  @return value to save*/
-	public int getIntData(String key){
-		return -1;
-	}
+	public int getIntData(String key){return -1;}
+	
 	
 	/** public String getStringData(String key)
 	 * 	<br>
 	 *  Get string values to save
 	 *  @param key - key for the value to save
 	 *  @return value to save*/
-	public String getStringData(String key){
-		return "";
-	}
+	public String getStringData(String key){return "";}
+	
 	
 	/** public int getBooleanData(String key)<p>
 	 * 	<br>
 	 *  Get booleans to save
 	 *  @param key - key for the value to save
 	 *  @return value to save*/
-	public boolean getBooleanData(String key){
-		return false;
-	}
+	public boolean getBooleanData(String key){return false;}
+	
 	
 	/** Save the data to an file that can be loaded when application restarts
 	 * 
 	 * @param writer - A BufferedWriter to write data to an file
 	 */
-	public void saveFile(BufferedWriter writer){
-		
-	}
+	public void saveFile(BufferedWriter writer){}
+	
 }
