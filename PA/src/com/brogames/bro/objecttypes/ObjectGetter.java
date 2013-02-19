@@ -3,13 +3,14 @@ package com.brogames.bro.objecttypes;
 import com.brogames.bro.objecttypes.items.*;
 import com.brogames.bro.objecttypes.objects.Object;
 import com.brogames.bro.objecttypes.objects.*;
+import android.util.Log;
 
 public class ObjectGetter {
 
 	public static Object setObject(int objectType) {
 
-		switch (objectType) {
-
+		switch (objectType){
+		
 		case ObjectType.GRASS:
 			return new Grass();
 			
@@ -141,6 +142,16 @@ public class ObjectGetter {
 			
 		case ObjectType.WRECK16:
 			return new Wreck16();
+			
+		case ObjectType.LOG_PILE:
+			return new LogPile();
+			
+		case ObjectType.FIRE_PLACE:
+			return new FirePlace();
+			
+		default: 
+			if(objectType != 0)
+				Log.e("ObjectHandler", "No object found to set for objecttype " + objectType);
 		}
 		return null;
 	}
@@ -191,7 +202,7 @@ public class ObjectGetter {
 			return new Pot();
 			
 		case ObjectType.LOG:
-			return new Log();
+			return new TreeLog();
 		
 		case ObjectType.BANANA:
 			return new Banana();
@@ -210,6 +221,13 @@ public class ObjectGetter {
 	
 		case ObjectType.TINDER:
 			return new Tinder();
+			
+		case ObjectType.FIRE_LOGS:
+			return new FireLogs();
+			
+		default:
+			if(objectType != 0)
+				Log.e("ObjectHandler", "No item found to set for objecttype " + objectType);
 		}
 		
 		return null;

@@ -2,10 +2,11 @@ package com.brogames.bro.objecttypes.items;
 
 import com.brogames.bro.ImageGetter;
 import com.brogames.bro.objecttypes.ObjectType;
+import com.brogames.bro.popups.Interact;
+
 import android.graphics.Color;
 
 public class Axe extends Item{
-
 	
 	public Axe(){
 		objectType = ObjectType.AXE;
@@ -18,9 +19,19 @@ public class Axe extends Item{
 		components[2] = ObjectType.WOODY_VINES;
 		components[3] = -1;
 		
-		conPalm = new int[2];
-		conPalm[0] = 2; // '1' removes object from map, '2' needed for removing objects with a height of two tiles.
-		conPalm[1] = ObjectType.LOG;
+		/* Consequences handling list:
+		 * 
+		 * 1. What to do?
+		 * 2. What to return?
+		 * 3. What to add?
+		 * 4. Take item?
+		 * 
+		 */
+		interectableObjects.add(ObjectType.PALM);
+		consequens[0] = Interact.REMOVE_MULTIPLE;
+		consequens[1] = ObjectType.LOG;
+		consequens[2] = -1;
+		consequens[3] = -1;
 	}
 	
 }

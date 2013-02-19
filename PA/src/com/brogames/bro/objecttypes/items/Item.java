@@ -1,7 +1,6 @@
 package com.brogames.bro.objecttypes.items;
 
 import java.util.Vector;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,7 +12,8 @@ public class Item implements Comparable<Item> {
 	protected int objectType = -1;
 	protected int[] components = { -1, -1, -1, -1 };
 	protected Vector<Integer> recipe = new Vector<Integer>();
-	protected int[] consequens, conRock, conBush, conPalm, conWater; 
+	protected int[] consequens = new int[4]; 
+	protected Vector<Integer> interectableObjects = new Vector<Integer>();
 	protected boolean isPickup = true;
 
 	/*
@@ -45,26 +45,14 @@ public class Item implements Comparable<Item> {
 		return objectType;
 	}
 
-	public int[] getConsequences(int objectType) { 
-		switch (objectType) {
-		case ObjectType.BUSH:
-			consequens = conBush;
-			break;
-		case ObjectType.ROCK:
-			consequens = conRock;
-			break;
-		case ObjectType.WATER:
-			consequens = conWater;
-			break;
-		case ObjectType.PALM:
-			consequens = conPalm;
-			break;
-		default:
-			consequens = null;
-		}
+	public int[] getConsequences() { 
 		return consequens;
 	}
 
+	public Vector<Integer> getInterectableObjects(){
+		return interectableObjects;
+	}
+	
 	public boolean isPickup() {
 		return isPickup;
 	}

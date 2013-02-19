@@ -9,12 +9,15 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.brogames.bro.objecttypes.ObjectType;
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Interact;
 import com.brogames.bro.popups.Inventory;
 import com.brogames.bro.popups.Message;
 import com.brogames.bro.popups.PickupAnimation;
 import com.core.ks.GameView;
+import com.core.ks.InputHandler;
 import com.core.ks.InputObject;
 
 public class LaunchView extends GameView {
@@ -75,6 +78,9 @@ public class LaunchView extends GameView {
 		
 		if(bundle.getBoolean("menuIsOpen"))
 			menu.open();
+		
+		objectLayer[0][5].add(ObjectType.FIRE_PLACE);
+		objectLayer[0][6].add(ObjectType.LOG_PILE);
 	}
 
 	// Update

@@ -13,6 +13,7 @@ public class Stick extends Item{
 		bmp = ImageGetter.getImage(true, objectType, 0);
 		recipe.add(ObjectType.AXE);
 		recipe.add(ObjectType.ARROW);
+		recipe.add(ObjectType.BOW_DRILL);
 	}
 
 }

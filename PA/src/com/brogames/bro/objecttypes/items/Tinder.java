@@ -12,6 +12,8 @@ public class Tinder extends Item{
 		color.setColor(Color.BLUE);
 		
 		bmp = ImageGetter.getImage(true, objectType, 0);
+		
+		recipe.add(ObjectType.FIRE_LOGS);
 	}
 	
 }

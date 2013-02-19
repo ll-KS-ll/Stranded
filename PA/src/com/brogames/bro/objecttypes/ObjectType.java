@@ -9,6 +9,8 @@ public class ObjectType {
 	public static final int ROCK = 151;
 	public static final int SAND = 123;
 	public static final int WATER = 271;
+	public static final int FIRE_PLACE = 277;
+	public static final int LOG_PILE = -3; // <-- No image yet
 	public static final int PALM = 241;
 	public static final int PALM_TOP = 211;
 	public static final int DIRT = 46;
@@ -121,5 +123,6 @@ public class ObjectType {
 	public static final int MAP = 18+FIRST_GRID;
 	public static final int SHOVEL_BLADE = 26+FIRST_GRID;
 	public static final int OPEN_COCONUT = 7+FIRST_GRID;
+	public static final int FIRE_LOGS = 127+FIRST_GRID; // No image yet
 	
 }

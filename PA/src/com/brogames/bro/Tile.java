@@ -83,6 +83,8 @@ public class Tile {
 		if (object != null) {
 			if (object.getBmp() != null)
 				canvas.drawBitmap(object.getBmp(), xPos, yPos, null);
+			else
+				canvas.drawRect(xPos, yPos, xPos+tileWidth, yPos+tileHeight, object.getColor());
 		}
 		if (item != null) {
 			if (item.getBmp() != null)

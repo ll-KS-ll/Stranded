@@ -17,9 +17,7 @@ public class Bow extends Item{
 		components[2] = -1;
 		components[3] = -1;
 		
-		//conPalm = new int[2];
-		//conPalm[0] = 2; // '1' removes object from map, '2' needed for removing objects with a height of two tiles.
-		//conPalm[1] = 2;// '0' or smaller returns no item, other numbers returns the item corresponding to the number
+		recipe.add(ObjectType.BOW_DRILL);
 	}
 	
 }

@@ -96,10 +96,6 @@ public class Bag {
 		return null;
 	}
 
-	public int[] getConsequencesData(int objectType) {
-		return equip.getConsequences(objectType);
-	}
-
 	//------------------------------------------------------------------------------------
 	
 	/** Special vector for handling stackable items. 
