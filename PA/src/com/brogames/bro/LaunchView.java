@@ -41,6 +41,8 @@ public class LaunchView extends GameView {
 	private Menu menu;
 	private Popup popup;
 	private boolean popIsUp = false;
+	private int screenWidth, screenHeight;
+	private int x, y;
 	
 	public LaunchView(Context context) {
 		super(context);
@@ -53,8 +55,8 @@ public class LaunchView extends GameView {
 		tileWidth = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		tileHeight = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 
-		int screenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
-		int screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
+		screenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
+		screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
 		
 		sizes = new Bundle();
 		sizes.putInt("boardWidth", tileWidth);
@@ -181,9 +183,21 @@ public class LaunchView extends GameView {
 	}
 	
 	public void move(InputObject input){
-		if (player.readyToMove()) { 
-			int x = (int) (((input.x - this.getWidth() / 2) + player.getX())/tileWidth);
-			int y = (int) (((input.y - this.getHeight() / 2) + player.getY())/tileHeight);
+		if (player.readyToMove()) {
+			
+			if (player.getX() < screenWidth/2)
+				x = (int) (input.x/tileWidth);
+			else if (player.getX() > (LaunchView.MAP_WIDTH*tileWidth)-(screenWidth/2))
+				x = (int) (LaunchView.MAP_WIDTH-(screenWidth/tileWidth) + input.x/tileWidth);
+			else
+				x = (int) (((input.x - screenWidth / 2) + player.getX())/tileWidth);
+			
+			if (player.getY() < screenHeight/2)
+				y = (int) (input.y/tileHeight);
+			else if (player.getY() > (LaunchView.MAP_HEIGHT*tileHeight)-(screenHeight/2))
+				y = (int) (LaunchView.MAP_HEIGHT-(screenHeight/tileHeight) + input.y/tileHeight);
+			else
+				y = (int) (((input.y - screenHeight / 2) + player.getY())/tileHeight);
 			
 			if (x >= 0 && x < MAP_WIDTH && y >=  0 && y < MAP_HEIGHT)
 				if (!objectLayer[x][y].isObstacle()) 
