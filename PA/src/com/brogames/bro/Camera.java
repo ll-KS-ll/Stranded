@@ -9,7 +9,6 @@ public class Camera {
 	private int boardWidth, boardHeight, screenWidth, screenHeight;
 	private Tile[][] backgroundLayer;
 	private Tile[][] objectLayer;
-	private Tile[][] itemLayer;
 	private Tile[][] topLayer;
 	private int xStart, xEnd, yStart, yEnd ,xView, yView, boardIndexX, boardIndexY;
 	
@@ -25,7 +24,6 @@ public class Camera {
 			for (int x = xStart; x < xEnd; x++){
 				backgroundLayer[x][y].draw(canvas, (boardWidth*x) - cx, (boardHeight*y) - cy);
 				objectLayer[x][y].draw(canvas, (boardWidth*x) - cx, (boardHeight*y) - cy);
-				itemLayer[x][y].draw(canvas, (boardWidth*x) - cx, (boardHeight*y) - cy);
 			}
 		}
 		
@@ -45,8 +43,7 @@ public class Camera {
 		
 		backgroundLayer = layer[0].getTiles();
 		objectLayer = layer[1].getTiles();
-		itemLayer = layer[2].getTiles();
-		topLayer = layer[3].getTiles();
+		topLayer = layer[2].getTiles();
 		
 		boardIndexX = player.getBoardIndexX();
 		boardIndexY = player.getBoardIndexY();
