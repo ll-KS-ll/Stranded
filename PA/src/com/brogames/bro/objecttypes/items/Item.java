@@ -2,35 +2,22 @@ package com.brogames.bro.objecttypes.items;
 
 import java.util.Vector;
 import com.brogames.bro.objecttypes.ObjectType;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Paint;
+import com.brogames.bro.objecttypes.TileObject;
 
-public class Item implements Comparable<Item> {
+public class Item extends TileObject implements Comparable<Item> {
 
-	protected Paint color = new Paint();
-	protected Bitmap bmp = null;
-	protected int objectType = -1;
 	protected int[] components = { -1, -1, -1, -1 };
 	protected Vector<Integer> recipe = new Vector<Integer>();
 	protected int[] consequens, conRock, conBush, conPalm, conWater; 
 	protected boolean isPickup = true;
 
-	/*
-	 * hej ni behöver en båt, en vild hund, ett svärd, tårtor, ett tält, en
-	 * kompis, //Jaci
-	 */
+	 /* hej ni behöver en båt, en vild hund, ett svärd, tårtor, ett tält, en
+	 * kompis, //Jaci */
 
-	public Item() {
-		color.setColor(Color.CYAN);
-	}
-
-	public Paint getColor() {
-		return color;
-	}
-
-	public Bitmap getBmp() {
-		return bmp;
+	public Item(int objectType) {
+		super(objectType);
+		isItem = true;
+		isObstacle = false;
 	}
 
 	public int[] getComponents() {
@@ -39,10 +26,6 @@ public class Item implements Comparable<Item> {
 
 	public Vector<Integer> getRecipe() {
 		return recipe;
-	}
-
-	public int getObjectType() {
-		return objectType;
 	}
 
 	public int[] getConsequences(int objectType) { 

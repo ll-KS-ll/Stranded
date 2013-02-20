@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
-import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
+import com.brogames.bro.ImageGetter;
 
-public class Rock extends Object{
+public class Rock extends Environment{
 
-	public Rock(){
-		objectType = ObjectType.ROCK;
+	public Rock(int objectType){
+		super(objectType);
 		color.setColor(Color.DKGRAY);
 		
 		int rand = (int) Math.round(Math.random() * 2);

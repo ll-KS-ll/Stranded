@@ -69,10 +69,8 @@ public class LaunchView extends GameView {
 		objectLayer = layer[1].getTiles();
 		topLayer = layer[2].getTiles();
 
-		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(),
-				R.drawable.character);
-		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(),
-				R.drawable.ui);
+		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(), R.drawable.character);
+		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
 		player = new Player(bmpChar, sizes, bundle, popup, objectLayer);
 		camera = new Camera(sizes);
 		menu = new Menu(menuSheet, sizes);

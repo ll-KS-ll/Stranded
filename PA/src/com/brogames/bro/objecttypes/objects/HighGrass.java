@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
-import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
+import com.brogames.bro.ImageGetter;
 
-public class HighGrass extends Object{
+public class HighGrass extends Environment{
 
-	public HighGrass(){
-		objectType = ObjectType.HIGH_GRASS;
+	public HighGrass(int objectType){
+		super(objectType);
 		color.setColor(Color.GREEN);
 	
 		bmp = ImageGetter.getImage(false, objectType, 0);

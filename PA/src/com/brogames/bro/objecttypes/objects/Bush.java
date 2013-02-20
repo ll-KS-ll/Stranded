@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
 import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
 
-public class Bush extends Object{
+public class Bush extends Environment{
 
-	public Bush(){
-		objectType = ObjectType.BUSH;
+	public Bush(int objectType){
+		super(objectType);
 		color.setColor(Color.BLUE);
 		isObstacle = true;
 		isAnimation = true;

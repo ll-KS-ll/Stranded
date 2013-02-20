@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
-import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
+import com.brogames.bro.ImageGetter;
 
-public class Palm extends Object{
+public class Palm extends Environment{
 
-	public Palm(){
-		objectType = ObjectType.PALM;
+	public Palm(int objectType){
+		super(objectType);
 		color.setColor(Color.RED);
 		isObstacle = true;
 		isAnimation = true;

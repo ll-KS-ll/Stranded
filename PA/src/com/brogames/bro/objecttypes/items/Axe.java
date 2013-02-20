@@ -7,8 +7,8 @@ import android.graphics.Color;
 public class Axe extends Item{
 
 	
-	public Axe(){
-		objectType = ObjectType.AXE;
+	public Axe(int objectType){
+		super(objectType);
 		color.setColor(Color.BLUE);
 		
 		bmp = ImageGetter.getImage(true, objectType, 0);

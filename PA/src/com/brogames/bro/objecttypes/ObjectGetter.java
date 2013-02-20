@@ -1,15 +1,20 @@
 package com.brogames.bro.objecttypes;
 
 import com.brogames.bro.objecttypes.items.*;
-import com.brogames.bro.objecttypes.objects.Object;
+import com.brogames.bro.objecttypes.TileObject;
 import com.brogames.bro.objecttypes.objects.*;
 
 public class ObjectGetter {
 
-	public static Object setObject(int objectType) {
+	public static TileObject setTileObject(int objectType) {
 
+		if(objectType < 0)
+			return null;
+		
 		switch (objectType) {
 
+		//ENVIRONMENT
+		
 		case ObjectType.GRAY_STAIRS_UP:
 			return new GrayStairs(objectType);
 			
@@ -23,105 +28,114 @@ public class ObjectGetter {
 			return new GrayStairs(objectType);
 			
 		case ObjectType.HIGH_GRASS:
-			return new HighGrass();
+			return new HighGrass(objectType);
 
 		case ObjectType.BUSH:
-			return new Bush();
+			return new Bush(objectType);
 
 		case ObjectType.WATER:
-			return new Water();
+			return new Water(objectType);
 
 		case ObjectType.ROCK:
-			return new Rock();
+			return new Rock(objectType);
 
 		case ObjectType.SAND:
-			return new Sand();
+			return new Sand(objectType);
 			
 		case ObjectType.PALM:
-			return new Palm();
+			return new Palm(objectType);
 			
 		case ObjectType.PALM_TOP:
-			return new PalmTop();
+			return new PalmTop(objectType);
 			
 		case ObjectType.FOREST_PASSAGE_TOP:
-			return new ForestPassageTop();
+			return new ForestPassageTop(objectType);
 			
 		case ObjectType.FOREST_PASSAGE:
-			return new ForestPassage();
+			return new ForestPassage(objectType);
 		
+		// MISC
+			
 		case ObjectType.EMPTY:
-			// Empty object
-			return null;
+			return new Empty(objectType);
 		
 		default:
 			return new Undefined(objectType);
+		
+		// ITEMS	
+			
+		case ObjectType.STONE:
+			return new Stone(objectType);
+		
+		case ObjectType.STICK:
+			return new Stick(objectType);
+			
+		case ObjectType.WOODY_VINES:
+			return new WoodyVines(objectType);
+		
+		case ObjectType.AXE:
+			return new Axe(objectType);
+		
+		case ObjectType.CURVED_STICK:
+			return new CurvedStick(objectType);
+			
+		case ObjectType.SMALL_STONE:
+			return new SmallStone(objectType);
+			
+		case ObjectType.BOW:
+			return new Bow(objectType);
+		
+		case ObjectType.ARROW:
+			return new Arrow(objectType);
+			
+		case ObjectType.PORTAL:
+			return new Portal(objectType);
+			
+		case ObjectType.FEATHER:
+			return new Feather(objectType);
+			
+		case ObjectType.BOW_DRILL:
+			return new BowDrill(objectType);
+		
+		case ObjectType.SHOVEL:
+			return new Shovel(objectType);
+		
+		case ObjectType.SHARP_BONE:
+			return new SharpBone(objectType);
+			
+		case ObjectType.LOG:
+			return new Log(objectType);
+		
+		case ObjectType.BANANA:
+			return new Banana(objectType);
+			
+		case ObjectType.COCONUT:
+			return new Coconut(objectType);
+			
+		case ObjectType.SHOVEL_BLADE:
+			return new ShovelBlade(objectType);
+			
+		case ObjectType.OPEN_COCONUT:
+			return new OpenCoconut(objectType);
+			
+		case ObjectType.MAP:
+			return new Map(objectType);
+	
+		case ObjectType.TINDER:
+			return new Tinder(objectType);
+		
 		}
 	}
 
 	public static Item setItem(int objectType){
-		
-		switch(objectType){
-		case ObjectType.STONE:
-			return new Stone();
-		
-		case ObjectType.STICK:
-			return new Stick();
-			
-		case ObjectType.WOODY_VINES:
-			return new WoodyVines();
-		
-		case ObjectType.AXE:
-			return new Axe();
-		
-		case ObjectType.CURVED_STICK:
-			return new CurvedStick();
-			
-		case ObjectType.SMALL_STONE:
-			return new SmallStone();
-			
-		case ObjectType.BOW:
-			return new Bow();
-		
-		case ObjectType.ARROW:
-			return new Arrow();
-			
-		case ObjectType.PORTAL:
-			return new Portal();
-			
-		case ObjectType.FEATHER:
-			return new Feather();
-			
-		case ObjectType.BOW_DRILL:
-			return new BowDrill();
-		
-		case ObjectType.SHOVEL:
-			return new Shovel();
-		
-		case ObjectType.SHARP_BONE:
-			return new SharpBone();
-			
-		case ObjectType.LOG:
-			return new Log();
-		
-		case ObjectType.BANANA:
-			return new Banana();
-			
-		case ObjectType.COCONUT:
-			return new Coconut();
-			
-		case ObjectType.SHOVEL_BLADE:
-			return new ShovelBlade();
-			
-		case ObjectType.OPEN_COCONUT:
-			return new OpenCoconut();
-			
-		case ObjectType.MAP:
-			return new Map();
+		if(objectType > ObjectType.FIRST_GRID)
+			return (Item)setTileObject(objectType);
+		return null;
+	}
 	
-		case ObjectType.TINDER:
-			return new Tinder();
-		}
-		
+	public static Environment setEnvironment(int objectType){
+		if(objectType <= ObjectType.FIRST_GRID)
+			return (Environment)setTileObject(objectType);
 		return null;
 	}
 	
