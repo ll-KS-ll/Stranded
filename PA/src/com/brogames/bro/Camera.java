@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class Camera {
 	
-	private float cx, cy;
+	private float cx, cy, px, py;
 	private int boardWidth, boardHeight, screenWidth, screenHeight;
 	private Tile[][] backgroundLayer;
 	private Tile[][] objectLayer;
@@ -29,7 +29,7 @@ public class Camera {
 			}
 		}
 		
-		player.draw(canvas, screenWidth / 2, screenHeight / 2);
+		player.draw(canvas, px, py);
 		
 		for (int y = yStart; y < yEnd; y++)
 			for (int x = xStart; x < xEnd; x++)
@@ -51,28 +51,49 @@ public class Camera {
 		boardIndexX = player.getBoardIndexX();
 		boardIndexY = player.getBoardIndexY();
 		
-		xView = (int)((screenWidth/2)/boardWidth)+ 2;
-		yView = (int)((screenHeight/2)/boardHeight)+ 2;
+		xView = (int)((screenWidth/2)/boardWidth)+2;
+		yView = (int)((screenHeight/2)/boardHeight)+2;
 		
-		if (boardIndexX - xView <= 0)
-			xStart = 0;
-		else
+		if (boardIndexX - xView > 0)
 			xStart = boardIndexX - xView;
-		
-		if (boardIndexX + xView >= LaunchView.MAP_WIDTH)
-			xEnd = LaunchView.MAP_WIDTH;
 		else
+			xStart = 0;	
+		if (boardIndexX + xView < LaunchView.MAP_WIDTH)
 			xEnd = boardIndexX + xView;
-		
-		if (boardIndexY - yView <= 0)
-			yStart = 0;
 		else
+			xEnd = LaunchView.MAP_WIDTH;
+		if (boardIndexY - yView > 0)
 			yStart = boardIndexY - yView;
-		
-		if (boardIndexY + yView >= LaunchView.MAP_HEIGHT)
-			yEnd = LaunchView.MAP_HEIGHT;
 		else
+			yStart = 0; 
+		if (boardIndexY + yView < LaunchView.MAP_HEIGHT)
 			yEnd = boardIndexY + yView;
+		else
+			yEnd = LaunchView.MAP_HEIGHT;
+		
+		if (player.getX() < screenWidth/2){
+			px = player.getX();
+			cx = 0;
+			xEnd = screenWidth/boardWidth + 1;
+		}else if (player.getX() > (LaunchView.MAP_WIDTH*boardWidth)-(screenWidth/2)){
+			px = player.getX() - ((LaunchView.MAP_WIDTH*boardWidth)-(screenWidth));
+			cx = (LaunchView.MAP_WIDTH*boardWidth)-(screenWidth);
+			xStart = LaunchView.MAP_WIDTH - screenWidth/boardWidth - 1;
+		}else
+			px = (screenWidth/2);
+		
+		if (player.getY() < screenHeight/2){
+			py = player.getY();
+			cy = 0;
+			yEnd = screenHeight/boardHeight + 1;
+		}else if (player.getY() > (LaunchView.MAP_HEIGHT*boardHeight)-(screenHeight/2)){
+			py = player.getY() - ((LaunchView.MAP_HEIGHT*boardHeight)-(screenHeight));
+			cy = (LaunchView.MAP_HEIGHT*boardHeight)-(screenHeight);
+			yStart = LaunchView.MAP_HEIGHT - screenHeight/boardHeight - 1;
+		}else
+			py = screenHeight/2;
+
 	}
 
 }
+
