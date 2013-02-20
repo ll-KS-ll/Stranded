@@ -2,7 +2,7 @@ package com.brogames.bro.objecttypes.items;
 
 import com.brogames.bro.ImageGetter;
 import com.brogames.bro.objecttypes.ObjectType;
-import com.brogames.bro.popups.Interact;
+import com.brogames.bro.Interact;
 
 import android.graphics.Color;
 

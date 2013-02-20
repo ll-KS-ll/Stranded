@@ -18,7 +18,7 @@ public class Map extends Activity {
 	private static int layerCounter;
 	private static String FILENAME, line, res;
 	private static boolean mapValue = false;
-	private static Layer[] layer = new Layer[4];
+	private static Layer[] layer = new Layer[3];
 
 	public static void loadMap(Context context, String file, Bundle sizes) {
 		res = "";
@@ -53,7 +53,7 @@ public class Map extends Activity {
 				in.close();
 
 				StringTokenizer tokens = new StringTokenizer(res, "|");
-				for (int n = 0; n < 4; n++) {
+				for (int n = 0; n < layer.length; n++) {
 					layer[n] = new Layer(tokens.nextToken(), sizes);
 				}
 			}

@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 import com.brogames.bro.ImageGetter;
 import com.brogames.bro.objecttypes.ObjectType;
-import com.brogames.bro.popups.Interact;
+import com.brogames.bro.Interact;
 
 public class BowDrill extends Item {
 
