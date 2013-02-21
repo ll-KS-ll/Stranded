@@ -1,7 +1,7 @@
 package com.brogames.bro.objecttypes.items;
 
 import java.util.LinkedList;
-import com.brogames.bro.objecttypes.ObjectGetter;
+import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.popups.Slot;
 
 public class CraftSystem {
@@ -84,7 +84,7 @@ public class CraftSystem {
 		if(possibleCraft.isEmpty())
 			return false;
 		
-		craftItem = ObjectGetter.setItem(possibleCraft.getFirst());
+		craftItem = ObjectHandler.setItem(possibleCraft.getFirst());
 		
 		int[] neededComps = craftItem.getComponents(); 
 		boolean[] hasComponents = new boolean[neededComps.length];
@@ -146,7 +146,7 @@ public class CraftSystem {
 		int[] childItems = parentItem.getComponents();
 		for(int n=0; n <childItems.length; n++){
 			if(childItems[n] != -1){
-				detachItems[n] = ObjectGetter.setItem(childItems[n]);
+				detachItems[n] = ObjectHandler.setItem(childItems[n]);
 				possible = true;
 			}
 		}

@@ -2,10 +2,10 @@ package com.brogames.bro.objecttypes.objects;
 
 import com.brogames.bro.ImageGetter;
 
-public class BrownStairs extends Object{
+public class BrownStairs extends Environment{
 
 	public BrownStairs(int objectType){
-		this.objectType = objectType;
+		super(objectType);
 		bmp = ImageGetter.getImage(false, objectType, 0);
 		isObstacle = false;
 	}

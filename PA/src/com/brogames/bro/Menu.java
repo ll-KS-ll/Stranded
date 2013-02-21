@@ -1,11 +1,11 @@
 package com.brogames.bro;
 
-import com.core.ks.InputObject;
-import com.core.ks.Popup;
-
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
+
+import com.core.ks.InputObject;
+import com.core.ks.Popup;
 
 public class Menu {
 
@@ -15,15 +15,17 @@ public class Menu {
 	private Bitmap background, bag;
 	private Bitmap buttonUp, buttonDown;
 	private Bitmap map, notes;
+	private Bitmap bmpEquip;
 	private int boardWidth, boardHeight, width;
 	private int hungerIndex = 0, thirstIndex = 0;
 	private String message;
 
-	public Menu(Bitmap bmp, Bundle boardSize) {
+	public Menu(Bitmap bmp, Bitmap bmpEquip, Bundle boardSize) {
 		int bw = boardSize.getInt("boardWidth");
 		int bh = boardSize.getInt("boardHeight");
 		isOpen = false;
-
+		this.bmpEquip = bmpEquip;
+		
 		background = Bitmap.createBitmap(bmp, bw, bh * 4, bw, bh);
 		bag = Bitmap.createBitmap(bmp, bw * 0, bh * 0, bw * 2, bh * 3);
 		
@@ -43,7 +45,7 @@ public class Menu {
 		boardHeight = bh;
 	}
 
-	public void tick(int hunger, int thirst) {
+	public void tick(Bitmap bmpEquip, int hunger, int thirst) {
 		if (hunger < 12)
 			hungerIndex = 0;
 		else if (hunger < 25)
@@ -69,6 +71,8 @@ public class Menu {
 			thirstIndex = 2;
 		else
 			thirstIndex = 3;
+		
+		this.bmpEquip = bmpEquip;
 	}
 
 	public void render(Canvas canvas) {
@@ -85,7 +89,10 @@ public class Menu {
 			canvas.drawBitmap(map, width - boardWidth * 5, top, null);
 			canvas.drawBitmap(notes, width - boardWidth * 6, top, null);
 			canvas.drawBitmap(bag, 0, top - boardHeight * 2, null);
-
+			
+			if(bmpEquip != null)
+				canvas.drawBitmap(bmpEquip, boardWidth*3, top, null);
+			
 		} else {
 			canvas.drawBitmap(buttonUp, width - boardWidth, top, null);
 		}
@@ -161,6 +168,12 @@ public class Menu {
 		// Notes icon
 		if (input.x > width - boardWidth * 6 && input.x < width - boardWidth*5) {
 			message = "I haven't made any notes yet.";
+			popup.setPopup(5);
+		}
+		
+		// Notes icon
+		if (input.x > boardWidth * 3 && input.x < boardWidth*4) {
+			message = "This is what I've equipped to use.";
 			popup.setPopup(5);
 		}
 	}

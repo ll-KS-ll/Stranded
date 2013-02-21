@@ -6,8 +6,8 @@ import com.brogames.bro.objecttypes.ObjectType;
 public class Arrow extends Item{
 
 	
-	public Arrow(){
-		objectType = ObjectType.ARROW;
+	public Arrow(int objectType){
+		super(objectType);
 		
 		bmp = ImageGetter.getImage(true, objectType, 0);
 		

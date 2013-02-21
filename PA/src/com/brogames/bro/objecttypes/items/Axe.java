@@ -8,8 +8,8 @@ import android.graphics.Color;
 
 public class Axe extends Item{
 	
-	public Axe(){
-		objectType = ObjectType.AXE;
+	public Axe(int objectType){
+		super(objectType);
 		color.setColor(Color.BLUE);
 		
 		bmp = ImageGetter.getImage(true, objectType, 0);
@@ -18,20 +18,19 @@ public class Axe extends Item{
 		components[1] = ObjectType.STICK;
 		components[2] = ObjectType.WOODY_VINES;
 		components[3] = -1;
-		
-		/* Consequences handling list:
-		 * 
-		 * 1. What to do?
-		 * 2. What to return?
-		 * 3. What to add?
-		 * 4. Take item?
-		 * 
-		 */
-		interectableObjects.add(ObjectType.PALM);
-		consequens[0] = Interact.REMOVE_MULTIPLE;
-		consequens[1] = ObjectType.LOG;
-		consequens[2] = -1;
-		consequens[3] = -1;
+	}
+	
+	public int[] getConsequences(int objectType){
+		super.getConsequences(objectType); 
+		switch(objectType){
+		case ObjectType.PALM:
+			consequences[0] = Interact.REMOVE_PALM;
+			consequences[1] = ObjectType.LOG;
+			consequences[2] = -1;
+			consequences[3] = -1;
+			break;
+		}
+		return consequences;
 	}
 	
 }

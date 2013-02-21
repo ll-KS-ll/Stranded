@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
-import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
+import com.brogames.bro.ImageGetter;
 
-public class PalmTop extends Object{
+public class PalmTop extends Environment{
 
-	public PalmTop(){
-		objectType = ObjectType.PALM_TOP;
+	public PalmTop(int objectType){
+		super(objectType);
 		color.setColor(Color.RED);
 		isAnimation = true;
 		maxFrames = 2;

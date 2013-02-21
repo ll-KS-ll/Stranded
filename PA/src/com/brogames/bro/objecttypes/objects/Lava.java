@@ -1,13 +1,12 @@
 package com.brogames.bro.objecttypes.objects;
 
-import com.brogames.bro.ImageGetter;
-import com.brogames.bro.objecttypes.ObjectType;
 import android.graphics.Color;
+import com.brogames.bro.ImageGetter;
 
-public class Lava extends Object{
+public class Lava extends Environment{
 
-	public Lava(){
-		objectType = ObjectType.LAVA;
+	public Lava(int objectType){
+		super(objectType);
 		color.setColor(Color.RED);
 		isObstacle = true;
 		isAnimation = true;

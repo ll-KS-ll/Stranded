@@ -5,61 +5,89 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 
-import com.brogames.bro.objecttypes.ObjectGetter;
+import com.brogames.bro.objecttypes.Empty;
+import com.brogames.bro.objecttypes.ObjectHandler;
+import com.brogames.bro.objecttypes.ObjectType;
 import com.brogames.bro.objecttypes.items.Item;
-import com.brogames.bro.objecttypes.objects.Object;
+import com.brogames.bro.objecttypes.objects.Environment;
+import com.brogames.bro.objecttypes.TileObject;
 
 public class Tile {
 
-	private Object object;
-	private Item item;
+	private TileObject object;
 	private boolean wayPoint = false, last = false;
 	private int tileWidth, tileHeight;
 	private Paint color = new Paint();
-	private int objectType;
 
 	public Tile(int objectType, int x, int y, Bundle sizes) {
-		this.objectType = objectType;
-
-		if (objectType < 331)
-			object = ObjectGetter.setObject(objectType);
-		else
-			item = ObjectGetter.setItem(objectType);
+		object = ObjectHandler.setTileObject(objectType);
 
 		tileWidth = sizes.getInt("boardWidth");
 		tileHeight = sizes.getInt("boardHeight");
 	}
 
-	public void addItem(int objectType) {
-		item = ObjectGetter.setItem(objectType);
-		this.objectType = objectType;
-	}
-
-	public void removeItem() {
-		item = null;
-		objectType = 0;
-	}
-
+	// ITEM
+	/** Try to add an item to this tile.
+	 *  Will set the tile object to null if objectType doesn't is an item.
+	 * @param objectType - the object type for the item
+	 */
+	public void addItem(int objectType) {object = ObjectHandler.setItem(objectType);}
+	/** Remove the item from this tile */
+	public void removeItem() {object = new Empty(ObjectType.EMPTY);}
+	/** Try get the tile's item.
+	 *  If the tile isn't an item it will return null;
+	 *  @return item - current item for this tile
+	 */
 	public Item getItem() {
-		return item;
+		if(object.isItem())
+			return (Item)object;
+		return null;
 	}
 
+	// ENVIRONMENT
+	/** Try to add an environment object to this tile.
+	 *  Will set this tile object to null if objectType doesn't is an environment.
+	 * @param objectType - the object type for the environment
+	 */
+	public void addEnvironment(int objectType) {
+		object = ObjectHandler.setEnvironment(objectType);
+	}
+	/** Remove the environment object from this tile */
+	public void removeEnvironment() {object = new Empty(ObjectType.EMPTY);}
+	/** Try get the tile's environment object.
+	 *  If the tile isn't an environment object it will return null;
+	 *  @return environment - current environment for this tile
+	 */
+	public Environment getEnvironment() {
+		if(object.isItem())
+			return (Environment)object;
+		return null;
+	}
+	
+	// TILE OBJECT
+	/**Add an tile object to this tile.
+	 * It might be an environment object or an item.
+	 * @param objectType - the object type for this tile object
+	 */
+	public void addObject(int objectType) {object = ObjectHandler.setTileObject(objectType);}
+	/**Remove tile object for this tile*/
+	public void removeObject() {object = new Empty(ObjectType.EMPTY);}
+	/**Get the object for this tile.
+	 * Can return both environment objects or items.
+	 * @return object - tile object for this tile
+	 */
+	public TileObject getObject() {return object;}
+	
 	public int getObjectType() {
-		return objectType;
+		if(object != null)
+			return object.getObjectType();
+		return -1;
 	}
-
-	public void add(int objectType) {
-		this.objectType = objectType;
-		object = ObjectGetter.setObject(objectType);
-	}
-
-	public void removeObject() {
-		object = null;
-		objectType = 0;
-	}
-
-	public Object getObject() {
-		return object;
+	
+	public boolean isItem() {
+		if(object != null)
+			return object.isItem();
+		return false;
 	}
 
 	public boolean isObstacle() {
@@ -80,17 +108,11 @@ public class Tile {
 	}
 
 	public void draw(Canvas canvas, float xPos, float yPos) {
-		if (object != null) {
+		if (object != null && getObjectType() != ObjectType.EMPTY ) {
 			if (object.getBmp() != null)
 				canvas.drawBitmap(object.getBmp(), xPos, yPos, null);
 			else
 				canvas.drawRect(xPos, yPos, xPos+tileWidth, yPos+tileHeight, object.getColor());
-		}
-		if (item != null) {
-			if (item.getBmp() != null)
-				canvas.drawBitmap(item.getBmp(), xPos, yPos, null);
-			else
-				canvas.drawRect(xPos, yPos, xPos+tileWidth, yPos+tileHeight, item.getColor());
 		}
 
 		if (wayPoint) {

@@ -2,7 +2,7 @@ package com.brogames.bro;
 
 import java.util.StringTokenizer;
 import java.util.Vector;
-import com.brogames.bro.objecttypes.ObjectGetter;
+import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.objecttypes.items.Item;
 
 public class Bag {
@@ -19,14 +19,14 @@ public class Bag {
 			String token = tokens.nextToken();
 			StringTokenizer tempTokens = new StringTokenizer(token, ":");
 
-			Item item = ObjectGetter.setItem(Integer.valueOf(tempTokens.nextToken()));
+			Item item = ObjectHandler.setItem(Integer.valueOf(tempTokens.nextToken()));
 
 			BagItem bItem = new BagItem(item, Integer.valueOf(tempTokens.nextToken()));
 			inventory.addElement(bItem);
 		}
 		
 		if(equip != -1)
-			this.equip = ObjectGetter.setItem(equip);;
+			this.equip = ObjectHandler.setItem(equip);;
 
 	}
 
@@ -54,7 +54,11 @@ public class Bag {
 		if(inventory.size() > pos && pos != -1)
 			inventory.removeItem(pos);
 	}
-
+	
+	public void removeItem(Item item) {
+		int pos = inventory.indexOf(item);
+		removeItem(pos);
+	}
 	
 	public int getAllItemsCount() {
 		return inventory.totalSize();

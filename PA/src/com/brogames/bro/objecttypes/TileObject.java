@@ -1,18 +1,20 @@
-package com.brogames.bro.objecttypes.objects;
+package com.brogames.bro.objecttypes;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class Object {
+public class TileObject {
 
+	// Move animation to Environment?
+	
 	protected Paint color = new Paint();
 	protected Bitmap bmp = null;
 	protected Bitmap[] bmpAnim = null;
 	protected boolean isAnimation = false;
-	protected boolean isObstacle = false;
+	protected boolean isObstacle, isItem;
 	protected int objectType = -1;
-	protected int animFrame = 0, frames = 0, animSpeed = 10, maxFrames;
+	protected int animFrame = 0, frames = 0, animSpeed = 10, maxFrames = 3;
 	
 	/* 	COLOR - always set a color for the object
 	 * 		"color.setColor(Color.'wanted color');"
@@ -39,9 +41,9 @@ public class Object {
 	 
 	 */
 	
-	public Object(){
+	public TileObject(int objectType){
+		this.objectType = objectType;
 		color.setColor(Color.MAGENTA);
-		maxFrames = 3;
 	}
 	
 	public Paint getColor(){
@@ -60,6 +62,10 @@ public class Object {
 			return bmpAnim[animFrame];
 		}else
 			return bmp;
+	}
+	
+	public boolean isItem(){
+		return isItem;
 	}
 	
 	public boolean isObstacle(){

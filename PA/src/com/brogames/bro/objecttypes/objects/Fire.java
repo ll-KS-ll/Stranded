@@ -1,18 +1,17 @@
 package com.brogames.bro.objecttypes.objects;
 
 import com.brogames.bro.ImageGetter;
-import android.graphics.Color;
 
-public class Bush extends Environment{
+public class Fire extends Environment{
 
-	public Bush(int objectType){
+	public Fire(int objectType){
 		super(objectType);
-		color.setColor(Color.BLUE);
-		isObstacle = true;
+
 		isAnimation = true;
 		maxFrames = 8;
 		bmpAnim = ImageGetter.getImageAnim(objectType, maxFrames);
-		animSpeed = 20;
+		animSpeed = 30;
 	}
-	
+
 }
+

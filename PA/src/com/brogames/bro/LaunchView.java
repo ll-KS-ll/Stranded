@@ -2,13 +2,14 @@ package com.brogames.bro;
 
 import java.io.BufferedWriter;
 import java.util.StringTokenizer;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
-import com.brogames.bro.objecttypes.ObjectType;
+
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Inventory;
 import com.brogames.bro.popups.Message;
@@ -68,22 +69,17 @@ public class LaunchView extends GameView {
 		objectLayer = layer[1].getTiles();
 		topLayer = layer[2].getTiles();
 
-		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(),
-				R.drawable.character);
-		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(),
-				R.drawable.ui);
+		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(), R.drawable.character);
+		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
 		player = new Player(bmpChar, sizes, bundle, popup, objectLayer);
 		camera = new Camera(sizes);
-		menu = new Menu(menuSheet, sizes);
+		menu = new Menu(menuSheet, player.getBag().getEquipedItem().getBmp(), sizes);
 		interact = new Interact(player, objectLayer, topLayer);
 		bmpChar.recycle();
 		menuSheet.recycle();
 
 		if (bundle.getBoolean("menuIsOpen"))
 			menu.open();
-		
-		objectLayer[0][5].add(ObjectType.FIRE_PLACE);
-		objectLayer[0][6].add(ObjectType.LOG_PILE);
 	}
 
 	// Update
@@ -91,7 +87,7 @@ public class LaunchView extends GameView {
 		super.tick();
 		player.tick(objectLayer, popup);
 		camera.tick(layer, player, getWidth(), getHeight());
-		menu.tick(player.getHunger(), player.getThirst());
+		menu.tick(player.getBag().getEquipedItem().getBmp(), player.getHunger(), player.getThirst());
 
 		if (player.changeSection()) {
 			StringTokenizer token = new StringTokenizer(current_section, "_");

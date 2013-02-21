@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.brogames.bro.objecttypes.items.Item;
 import com.core.ks.InputObject;
@@ -37,8 +36,8 @@ public class PickupAnimation extends Popup {
 		
 		color.setARGB(0, 0, 0, 0);
 		
-		Log.d("Item", "item" + item);
-		bmp = Bitmap.createBitmap(item.getBmp(), 0, 0, boardWidth, boardHeight, matrix, true);
+		if(item.getBmp() != null)
+			bmp = Bitmap.createBitmap(item.getBmp(), 0, 0, boardWidth, boardHeight, matrix, true);
 		
 		x = screenWidth/2 - boardWidth/4;
 		y = screenHeight/2 - boardHeight/4;
@@ -63,7 +62,8 @@ public class PickupAnimation extends Popup {
 
 	public void render(Canvas canvas) {
 		super.render(canvas); // It's proper manor to always call super.render
-		canvas.drawBitmap(bmp, matrix, null);
+		if(bmp != null)
+			canvas.drawBitmap(bmp, matrix, null);
 	}
 	
 	public void processMotionEvent(InputObject input) {

@@ -1,15 +1,12 @@
 package com.brogames.bro.objecttypes.items;
 
-import android.graphics.Color;
-import com.brogames.bro.ImageGetter;
 import com.brogames.bro.objecttypes.ObjectType;
 import com.brogames.bro.Interact;
 
-public class FireLogs extends Item{
+public class FirePlace extends Item{
 	
-	public FireLogs(){
-		objectType = ObjectType.FIRE_LOGS;
-		color.setColor(Color.BLUE);
+	public FirePlace(int objectType){
+		super(objectType);
 		
 		//bmp = ImageGetter.getImage(true, objectType, 0); // No image yet
 		
@@ -27,12 +24,19 @@ public class FireLogs extends Item{
 		 * 
 		 */
 		
-		interectableObjects.add(ObjectType.GRASS);
-		
-		consequens[0] = Interact.ADD_OBJECT;
-		consequens[1] = -1;
-		consequens[2] = ObjectType.LOG_PILE;
-		consequens[3] = 1;
+	}
+	
+	public int[] getConsequences(int objectType){
+		super.getConsequences(objectType);
+		switch(objectType){
+		case ObjectType.EMPTY:
+			consequences[0] = Interact.ADD;
+			consequences[1] = -1;
+			consequences[2] = ObjectType.FIRE_PLACE;
+			consequences[3] = 1;
+			break;
+		}
+		return consequences;
 	}
 	
 }

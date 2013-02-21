@@ -7,8 +7,8 @@ import android.graphics.Color;
 public class Bow extends Item{
 
 	
-	public Bow(){
-		objectType = ObjectType.BOW;
+	public Bow(int objectType){
+		super(objectType);
 		color.setColor(Color.BLUE);
 		bmp = ImageGetter.getImage(true, objectType, 0);
 		

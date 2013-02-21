@@ -9,7 +9,7 @@ public class ObjectType {
 	public static final int BROWN_STAIRS_UP = -1; 	// Edit
 	public static final int BROWN_STAIRS_DOWN = -1; 	// Edit
 	public static final int EMPTY = 0;
-	public static final int FIRE_PLACE = 277;
+	public static final int FIRE = 277;
 	public static final int FOREST_PASSAGE = 41;
 	public static final int FOREST_PASSAGE_TOP = 11;
 	public static final int GRASS = 121;
@@ -19,7 +19,6 @@ public class ObjectType {
 	public static final int GRAY_STAIRS_DOWN = 100;
 	public static final int HIGH_GRASS = 122;
 	public static final int LAVA = 309;
-	public static final int LOG_PILE = -3; // <-- No image yet
 	public static final int PALM = 241;
 	public static final int PALM_TOP = 211;
 	public static final int ROCK = 151;
@@ -38,7 +37,7 @@ public class ObjectType {
 	public static final int COCONUT = 6 + FIRST_GRID;
 	public static final int CURVED_STICK = 12 + FIRST_GRID;
 	public static final int FEATHER = 16 + FIRST_GRID;
-	public static final int FIRE_LOGS = 127+FIRST_GRID; // No image yet
+	public static final int FIRE_PLACE = 127+FIRST_GRID; // No image yet
 	public static final int FISHING_ROD = 28 + FIRST_GRID;
 	public static final int LOG = 9 + FIRST_GRID;
 	public static final int MAP = 18 + FIRST_GRID;
