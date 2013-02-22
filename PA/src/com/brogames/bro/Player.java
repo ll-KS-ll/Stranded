@@ -30,7 +30,7 @@ public class Player {
 	private Bag bag;
 	private int hunger, thirst;
 	private long lastTimer;
-	private static final int playerHealthUpdateTime = 300000;
+	private static final int playerHealthUpdateTime = 3000;
 	private boolean changeSection;
 	private Tile[][] objectLayer;
 	
@@ -280,6 +280,10 @@ public class Player {
 		return yPos;
 	}
 
+	public void onClick(Popup popup){
+		popup.setPopup(1);
+	}
+	
 	public int getBoardIndexX() {
 		return boardIndexX;
 	}
@@ -326,7 +330,7 @@ public class Player {
 	
 	public boolean isAlive(){
 		// What do we say to the god of death?
-		if(thirst >= 100 || hunger >= 100)
+		if(thirst >= 10000 || hunger >= 10000)
 			return false;
 		// Not today!
 		return true;
@@ -338,6 +342,10 @@ public class Player {
 	
 	public void sectionChangeProcessed(){
 		changeSection = false;
+	}
+	
+	public Bitmap getBitmap(){
+		return bmpChar;
 	}
 	
 	public Bag getBag(){

@@ -41,11 +41,15 @@ public class Slot {
 		isUsed = isSelected = false;
 		link = -1;
 
+		slotColor.setAntiAlias(true);
 		slotColor.setARGB(255, 112, 61, 20);
+		slotFrame.setAntiAlias(true);
 		slotFrame.setColor(Color.BLACK);
 		slotFrame.setStyle(Style.STROKE);
+		selectedIndicator.setAntiAlias(true);
 		selectedIndicator.setColor(Color.CYAN);
 		selectedIndicator.setStyle(Style.STROKE);
+		usedIndicator.setAntiAlias(true);
 		usedIndicator.setARGB(240, 50, 50, 50);
 		stackText.setColor(Color.WHITE);
 		stackText.setTextSize(height / 5);

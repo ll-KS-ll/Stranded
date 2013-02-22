@@ -37,7 +37,7 @@ public class ObjectType {
 	public static final int COCONUT = 6 + FIRST_GRID;
 	public static final int CURVED_STICK = 12 + FIRST_GRID;
 	public static final int FEATHER = 16 + FIRST_GRID;
-	public static final int FIRE_PLACE = 127+FIRST_GRID; // No image yet
+	public static final int FIRE_PLACE = 313 + FIRST_GRID;
 	public static final int FISHING_ROD = 28 + FIRST_GRID;
 	public static final int LOG = 9 + FIRST_GRID;
 	public static final int MAP = 18 + FIRST_GRID;

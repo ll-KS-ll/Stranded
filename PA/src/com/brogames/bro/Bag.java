@@ -88,7 +88,7 @@ public class Bag {
 	}
 	
 	public int getStack(int pos){
-		if(inventory.size() > pos)
+		if(inventory.size() > pos &&  pos < inventory.size())
 			return inventory.elementAt(pos).getStack();
 		return -1;
 	}

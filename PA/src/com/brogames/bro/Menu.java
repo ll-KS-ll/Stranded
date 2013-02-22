@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
 
+import com.brogames.bro.objecttypes.ObjectHandler;
+import com.brogames.bro.objecttypes.items.Item;
 import com.core.ks.InputObject;
 import com.core.ks.Popup;
 
@@ -20,11 +22,13 @@ public class Menu {
 	private int hungerIndex = 0, thirstIndex = 0;
 	private String message;
 
-	public Menu(Bitmap bmp, Bitmap bmpEquip, Bundle boardSize) {
+	public Menu(Bitmap bmp, int equipType, Bundle boardSize) {
 		int bw = boardSize.getInt("boardWidth");
 		int bh = boardSize.getInt("boardHeight");
 		isOpen = false;
-		this.bmpEquip = bmpEquip;
+		Item equip = ObjectHandler.setItem(equipType);
+		if(equip != null)
+			bmpEquip = equip.getBmp();
 		
 		background = Bitmap.createBitmap(bmp, bw, bh * 4, bw, bh);
 		bag = Bitmap.createBitmap(bmp, bw * 0, bh * 0, bw * 2, bh * 3);
@@ -45,34 +49,37 @@ public class Menu {
 		boardHeight = bh;
 	}
 
-	public void tick(Bitmap bmpEquip, int hunger, int thirst) {
-		if (hunger < 12)
+	public void tick(Item equip, int hunger, int thirst) {
+		if (hunger < 1200)
 			hungerIndex = 0;
-		else if (hunger < 25)
+		else if (hunger < 2500)
 			hungerIndex = 1;
-		else if (hunger < 37)
+		else if (hunger < 3700)
 			hungerIndex = 2;
-		else if (hunger < 50)
+		else if (hunger < 5000)
 			hungerIndex = 3;
-		else if (hunger < 62)
+		else if (hunger < 6200)
 			hungerIndex = 4;
-		else if (hunger < 75)
+		else if (hunger < 7500)
 			hungerIndex = 5;
-		else if (hunger < 87)
+		else if (hunger < 8700)
 			hungerIndex = 6;
 		else
 			hungerIndex = 7;
 
-		if (thirst < 25)
+		if (thirst < 2500)
 			thirstIndex = 0;
-		else if (thirst < 50)
+		else if (thirst < 5000)
 			thirstIndex = 1;
-		else if (thirst < 75)
+		else if (thirst < 7500)
 			thirstIndex = 2;
 		else
 			thirstIndex = 3;
 		
-		this.bmpEquip = bmpEquip;
+		if(equip != null)
+			bmpEquip = equip.getBmp();
+		else
+			bmpEquip = null;
 	}
 
 	public void render(Canvas canvas) {

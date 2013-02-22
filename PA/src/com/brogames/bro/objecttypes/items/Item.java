@@ -9,7 +9,15 @@ public class Item extends TileObject implements Comparable<Item> {
 	protected Vector<Integer> recipe = new Vector<Integer>();
 	protected int[] consequences = new int[4]; 
 	protected boolean isPickup = true;
-
+	protected int category, consumeValue;
+	
+	public static final int MISC = 0;
+	public static final int FOOD = 1;
+	public static final int FLUID = 2;
+	public static final int TOOL = 3;
+	public static final int COMPONENT = 4;
+	public static final int TOOL_AND_COMPONENT = 5;
+	
 	 /* hej ni behöver en båt, en vild hund, ett svärd, tårtor, ett tält, en
 	 * kompis, //Jaci */
 
@@ -17,6 +25,8 @@ public class Item extends TileObject implements Comparable<Item> {
 		super(objectType);
 		isItem = true;
 		isObstacle = false;
+		category = MISC;
+		consumeValue = 0;
 	}
 
 	public int[] getComponents() {
@@ -52,7 +62,14 @@ public class Item extends TileObject implements Comparable<Item> {
 	public boolean isPickup() {
 		return isPickup;
 	}
+	
+	public int getCategory(){
+		return category;
+	}
 
+	public int getConsumeValue(){
+		return consumeValue;
+	}
 	@Override
 	public int compareTo(Item another) {
 		if (getObjectType() > another.getObjectType()) {

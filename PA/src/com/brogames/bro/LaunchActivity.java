@@ -36,7 +36,7 @@ public class LaunchActivity extends GameActivity {
 	public void onStop() {
 		super.onStop();
 
-		if (view.getIntData("hunger") > 100 || view.getIntData("thirst") > 100)
+		if (view.getIntData("hunger") > 10000 || view.getIntData("thirst") > 10000)
 			settings.edit().clear().commit();
 	}
 

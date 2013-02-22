@@ -14,6 +14,7 @@ import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Inventory;
 import com.brogames.bro.popups.Message;
 import com.brogames.bro.popups.PickupAnimation;
+import com.brogames.bro.popups.PlayerPopup;
 import com.core.ks.GameView;
 import com.core.ks.InputObject;
 
@@ -73,7 +74,7 @@ public class LaunchView extends GameView {
 		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
 		player = new Player(bmpChar, sizes, bundle, popup, objectLayer);
 		camera = new Camera(sizes);
-		menu = new Menu(menuSheet, player.getBag().getEquipedItem().getBmp(), sizes);
+		menu = new Menu(menuSheet, bundle.getInt("equip"), sizes);
 		interact = new Interact(player, objectLayer, topLayer);
 		bmpChar.recycle();
 		menuSheet.recycle();
@@ -87,7 +88,7 @@ public class LaunchView extends GameView {
 		super.tick();
 		player.tick(objectLayer, popup);
 		camera.tick(layer, player, getWidth(), getHeight());
-		menu.tick(player.getBag().getEquipedItem().getBmp(), player.getHunger(), player.getThirst());
+		menu.tick(player.getBag().getEquipedItem(), player.getHunger(), player.getThirst());
 
 		if (player.changeSection()) {
 			StringTokenizer token = new StringTokenizer(current_section, "_");
@@ -120,8 +121,7 @@ public class LaunchView extends GameView {
 	public void render(Canvas canvas) {
 		canvas = getReadyCanvas(canvas);
 		if (ready()) {
-			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(),
-					background);
+			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), background);
 			camera.draw(canvas, player);
 			menu.render(canvas);
 		}
@@ -186,7 +186,7 @@ public class LaunchView extends GameView {
 				if (!objectLayer[x][y].isObstacle())
 					if (x == player.getBoardIndexX()
 							&& y == player.getBoardIndexY()) {
-						// Pressed player
+						player.onClick(popup);
 					} else {
 						Point target = new Point(x, y);
 						player.move(objectLayer, target);
@@ -201,6 +201,9 @@ public class LaunchView extends GameView {
 
 	public void checkPopup() {
 		switch (popup.checkPopup()) {
+		case 1: // Opens PickupAnimation
+			popup = new PlayerPopup(getResources(), player, sizes);
+			break;
 		case 3: // Opens PickupAnimation
 			popup = new PickupAnimation(player.getBag().ItemFound(), sizes);
 			break;

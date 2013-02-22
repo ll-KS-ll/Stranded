@@ -20,7 +20,7 @@ import com.core.ks.Popup;
 public class Inventory extends Popup {
 
 	// Core stuff
-	private int boardWidth, boardHeight, screenWidth, screenHeight, objWidth, objHeight;
+	private int tileWidth, tileHeight, screenWidth, screenHeight, objWidth, objHeight;
 	private int x, y, rows, cols;
 	private float scale;
 	private CraftSystem craftSys;
@@ -42,12 +42,12 @@ public class Inventory extends Popup {
 	public Inventory(Resources res, Bag bag, Bundle sizes, Tile tile) {
 		super(); // Call super or die!
 
-		boardWidth = sizes.getInt("boardWidth");
-		boardHeight = sizes.getInt("boardHeight");
+		tileWidth = sizes.getInt("boardWidth");
+		tileHeight = sizes.getInt("boardHeight");
 		screenWidth = sizes.getInt("screenWidth");
 		screenHeight = sizes.getInt("screenHeight");
-		objWidth = 2 * boardWidth;
-		objHeight = 2 * boardHeight;
+		objWidth = 2 * tileWidth;
+		objHeight = 2 * tileHeight;
 
 		this.bag = bag;
 		this.tile = tile;
@@ -71,9 +71,9 @@ public class Inventory extends Popup {
 		//tempBmp.recycle();
 		
 		// Check if scaling down the bag to fit screen is necessary
-		if(boardWidth * rows > screenWidth || boardHeight * cols > screenHeight){
-			float temp = (float)screenHeight / (float)(boardHeight * cols);
-			scale = (float)screenWidth / (float)(boardWidth * rows);
+		if(tileWidth * rows > screenWidth || tileHeight * cols > screenHeight){
+			float temp = (float)screenHeight / (float)(tileHeight * cols);
+			scale = (float)screenWidth / (float)(tileWidth * rows);
 			if(temp < scale)
 				scale = temp;
 		}else{
@@ -84,8 +84,8 @@ public class Inventory extends Popup {
 		int q = 0;
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				int xPos = boardWidth + boardWidth / 4 * j + objWidth * j;
-				int yPos = boardHeight + boardHeight / 4 * i + objHeight * i;
+				int xPos = tileWidth + tileWidth / 4 * j + objWidth * j;
+				int yPos = tileHeight + tileHeight / 4 * i + objHeight * i;
 				slots[q] = new Slot(bag.getItem(q), xPos, yPos, objWidth, objHeight, q);
 				q++;
 			}
@@ -95,26 +95,26 @@ public class Inventory extends Popup {
 		int z = 0;
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				int xPos = boardWidth * (rows - 3) - (boardWidth / 4 + objWidth)*j; //Same
+				int xPos = tileWidth * (rows - 3) - (tileWidth / 4 + objWidth)*j; //Same
 				int yPos;
 				if (screenWidth > screenHeight)
-					yPos = boardHeight + (boardHeight / 4 + objHeight)*i;
+					yPos = tileHeight + (tileHeight / 4 + objHeight)*i;
 				else
-					yPos = boardHeight * (cols - 3) - (boardHeight / 4 + objHeight)*i;
+					yPos = tileHeight * (cols - 3) - (tileHeight / 4 + objHeight)*i;
 				craftSlots[z] = new Slot(null, xPos, yPos, objWidth, objHeight, z);
 				z++;
 			}
 		}
 		
 		// Setup Buttons
-		int xText = boardWidth * (rows - 3) - (boardWidth / 4 / 2 + objWidth);
-		int yText = boardHeight + boardHeight / 4 * 2 + objHeight * 2;
+		int xText = tileWidth * (rows - 3) - (tileWidth / 4 / 2 + objWidth);
+		int yText = tileHeight + tileHeight / 4 * 2 + objHeight * 2;
 		Bitmap normal = BitmapFactory.decodeResource(res, R.drawable.button_normal);
 		Bitmap pressed = BitmapFactory.decodeResource(res, R.drawable.button_pressed);
 		buttons = new BagButtons(normal, pressed, sizes, xText, yText);
 		
 		// Setup canvas and bitmap to paint bag on
-		bagBitmap = Bitmap.createBitmap(boardWidth*rows, boardHeight*cols, Bitmap.Config.ARGB_8888);
+		bagBitmap = Bitmap.createBitmap(tileWidth*rows, tileHeight*cols, Bitmap.Config.ARGB_8888);
 		bagCanvas = new Canvas(bagBitmap);
 		bagCanvas.scale(scale, scale);
 		x = (int)(screenWidth - bagCanvas.getWidth()*scale) / 2;
@@ -216,7 +216,13 @@ public class Inventory extends Popup {
 			default:
 				Log.d("Inventory", "Bag buttons out of index, check switch-statment in processMotionEvent()");
 			}
+			
 		}
+		
+		if(input.x < 0 || input.x > tileWidth*rows)
+			close();
+		else if(input.y < 0 || input.y > tileHeight*cols)
+			close();
 	}
 
 	public void craft() {
