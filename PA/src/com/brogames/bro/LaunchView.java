@@ -9,11 +9,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
-
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Inventory;
 import com.brogames.bro.popups.Message;
-import com.brogames.bro.popups.PickupAnimation;
+import com.brogames.bro.popups.PickupNotification;
 import com.core.ks.GameView;
 import com.core.ks.InputObject;
 
@@ -148,19 +147,19 @@ public class LaunchView extends GameView {
 	}
 
 	protected void onSwipeRight() {
-		interact.right(player.getBoardIndexX(), player.getBoardIndexY());
+		interact.right(player.getBoardIndexX(), player.getBoardIndexY(), popup);
 	}
 
 	protected void onSwipeLeft() {
-		interact.left(player.getBoardIndexX(), player.getBoardIndexY());
+		interact.left(player.getBoardIndexX(), player.getBoardIndexY(), popup);
 	}
 
 	protected void onSwipeTop() {
-		interact.up(player.getBoardIndexX(), player.getBoardIndexY());
+		interact.up(player.getBoardIndexX(), player.getBoardIndexY(), popup);
 	}
 
 	protected void onSwipeBottom() {
-		interact.down(player.getBoardIndexX(), player.getBoardIndexY());
+		interact.down(player.getBoardIndexX(), player.getBoardIndexY(), popup);
 	}
 
 	public void move(InputObject input) {
@@ -204,7 +203,7 @@ public class LaunchView extends GameView {
 	public void checkPopup() {
 		switch (popup.checkPopup()) {
 		case 3: // Opens PickupAnimation
-			popup = new PickupAnimation(player.getBag().ItemFound(), sizes);
+			popup = new PickupNotification(player.getBag().ItemFound(), sizes);
 			break;
 		case 4: // Opens GameOver-screen
 			popup = new GameOverScreen(this);

@@ -1,6 +1,7 @@
 package com.brogames.bro;
 
 import com.brogames.bro.objecttypes.ObjectGetter;
+import com.core.ks.Popup;
 
 public class Interact {
 
@@ -13,13 +14,13 @@ public class Interact {
 		super(); // Call super or die!
 
 		this.bag = player.getBag();
-
+		
 		this.objectLayer = objectLayer;
 		this.topLayer = topLayer;
 
 	}
 
-	public void consequences() {
+	public void consequences(Popup popup) {
 		if (objectLayer[interactX][interactY].getObject() == null)
 			return;
 		
@@ -34,31 +35,32 @@ public class Interact {
 
 			if (consequences[1] > 0) {
 				bag.insertItem(ObjectGetter.setItem(consequences[1]));
+				popup.setPopup(3);
 			}
 		}
 	}
 
-	public void down(int boardIndexX, int boardIndexY) {
+	public void down(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX;
 		interactY = boardIndexY + 1;
-		consequences();
+		consequences(popup);
 	}
 
-	public void up(int boardIndexX, int boardIndexY) {
+	public void up(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX;
 		interactY = boardIndexY - 1;
-		consequences();
+		consequences(popup);
 	}
 
-	public void right(int boardIndexX, int boardIndexY) {
+	public void right(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX + 1;
 		interactY = boardIndexY;
-		consequences();
+		consequences(popup);
 	}
 
-	public void left(int boardIndexX, int boardIndexY) {
+	public void left(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX - 1;
 		interactY = boardIndexY;
-		consequences();
+		consequences(popup);
 	}
 }
