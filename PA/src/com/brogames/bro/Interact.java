@@ -2,6 +2,7 @@ package com.brogames.bro;
 
 import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.objecttypes.items.Item;
+import com.core.ks.Popup;
 
 public class Interact {
 
@@ -19,7 +20,7 @@ public class Interact {
 		super(); // Call super or die!
 
 		this.bag = player.getBag();
-
+		
 		this.objectLayer = objectLayer;
 		this.topLayer = topLayer;
 	}
@@ -31,7 +32,7 @@ public class Interact {
 	 * 
 	 *  Best regards K-S
 	 */
-	public void consequences() {
+	public void consequences(Popup popup) {
 		Item tool = bag.getEquipedItem();
 		int objectType = objectLayer[interactX][interactY].getObject().getObjectType();
 		consequences = tool.getConsequences(objectType);
@@ -53,9 +54,11 @@ public class Interact {
 			}
 		
 			// What to get?
-			if (consequences[1] > 0)
+			if (consequences[1] > 0){
 				 bag.insertItem(ObjectHandler.setItem(consequences[1]));
-			
+				 popup.setPopup(3);
+			}
+				 
 			// What to add?
 			if (consequences[2] > 0)
 				objectLayer[interactX][interactY].addObject(consequences[2]);
@@ -67,27 +70,27 @@ public class Interact {
 		}
 	}
 
-	public void down(int boardIndexX, int boardIndexY) {
+	public void down(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX;
 		interactY = boardIndexY + 1;
-		consequences();
+		consequences(popup);
 	}
 
-	public void up(int boardIndexX, int boardIndexY) {
+	public void up(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX;
 		interactY = boardIndexY - 1;
-		consequences();
+		consequences(popup);
 	}
 
-	public void right(int boardIndexX, int boardIndexY) {
+	public void right(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX + 1;
 		interactY = boardIndexY;
-		consequences();
+		consequences(popup);
 	}
 
-	public void left(int boardIndexX, int boardIndexY) {
+	public void left(int boardIndexX, int boardIndexY, Popup popup) {
 		interactX = boardIndexX - 1;
 		interactY = boardIndexY;
-		consequences();
+		consequences(popup);
 	}
 }
