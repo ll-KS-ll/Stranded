@@ -195,7 +195,10 @@ public class PlayerPopup extends Popup {
 					slots[n].setAsUnused();
 					if(consumable == null)
 						return;
-					if(consumable.getCategory() == Item.FOOD){
+					if(consumable.getCategory() == Item.FOOD_AND_FLUID){
+						player.eat(consumable.getConsumeValue());
+						player.drink(consumable.getConsumeValue());
+					}else if(consumable.getCategory() == Item.FOOD){
 						player.eat(consumable.getConsumeValue());
 					}else if(consumable.getCategory() == Item.FLUID){
 						player.drink(consumable.getConsumeValue());
@@ -220,7 +223,8 @@ public class PlayerPopup extends Popup {
 		for(int i=0; i<player.getBag().getUniqueItemsCount(); i++){
 			Item consumable = player.getBag().getItem(i);
 			if (consumable != null)
-				if (consumable.getCategory() == Item.FOOD || consumable.getCategory() == Item.FLUID){
+				if (consumable.getCategory() == Item.FOOD || consumable.getCategory() == Item.FLUID
+				|| consumable.getCategory() == Item.FOOD_AND_FLUID){
 					consumables.addElement(consumable);
 					indexes[m] = i;
 					m++;

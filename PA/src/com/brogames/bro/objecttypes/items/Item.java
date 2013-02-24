@@ -14,9 +14,10 @@ public class Item extends TileObject implements Comparable<Item> {
 	public static final int MISC = 0;
 	public static final int FOOD = 1;
 	public static final int FLUID = 2;
-	public static final int TOOL = 3;
-	public static final int COMPONENT = 4;
-	public static final int TOOL_AND_COMPONENT = 5;
+	public static final int FOOD_AND_FLUID = 3;
+	public static final int TOOL = 4;
+	public static final int COMPONENT = 5;
+	public static final int TOOL_AND_COMPONENT = 6;
 	
 	 /* hej ni behöver en båt, en vild hund, ett svärd, tårtor, ett tält, en
 	 * kompis, //Jaci */
