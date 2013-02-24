@@ -1,5 +1,7 @@
 package com.core.ks;
 
+import com.brogames.bro.LaunchView;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -19,11 +21,17 @@ public class Popup {
 	 */
 	protected boolean state = false;
 	protected int popupToOpen = -1;
-	/** public Popup()<p>
-	 *  Initialize default pop up window. <br>
+	protected int tileWidth, tileHeight, screenWidth, screenHeight;
+	
+	 /**  Initialize default pop up window. <br>
 	 *  Should always be called for every pop up.
 	 */
 	public Popup(){
+		tileWidth = LaunchView.TILE_WIDTH;
+		tileHeight = LaunchView.TILE_HEIGHT;
+		screenWidth = LaunchView.SCREEN_WIDTH;
+		screenHeight = LaunchView.SCREEN_HEIGHT;
+		
 		color.setARGB(180, 0, 0, 0);
 		setPopup(-1);
 		state = true;
@@ -57,7 +65,7 @@ public class Popup {
 	 * 
 	 * @param popupValue - value for the pop up to open
 	 */
-	public void setPopup(int popupValue){//set equip true if you want to open inventory next time LaunchView runs
+	public void setPopup(int popupValue){
 		popupToOpen = popupValue;
 	}
 	

@@ -10,7 +10,6 @@ import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 
 public class Map extends Activity {
@@ -20,7 +19,7 @@ public class Map extends Activity {
 	private static boolean mapValue = false;
 	private static Layer[] layer = new Layer[3];
 
-	public static void loadMap(Context context, String file, Bundle sizes) {
+	public static void loadMap(Context context, String file) {
 		res = "";
 		layerCounter = 0;
 		FILENAME = "section" + file + ".tmx";
@@ -34,7 +33,7 @@ public class Map extends Activity {
 				BufferedReader buffreader = new BufferedReader(input);
 				while ((line = buffreader.readLine()) != null) {
 					if (line.equals("</data>")) {
-						layer[layerCounter] = new Layer(res, sizes);
+						layer[layerCounter] = new Layer(res);
 						layerCounter++;
 						mapValue = false;
 						res = "";
@@ -54,7 +53,7 @@ public class Map extends Activity {
 
 				StringTokenizer tokens = new StringTokenizer(res, "|");
 				for (int n = 0; n < layer.length; n++) {
-					layer[n] = new Layer(tokens.nextToken(), sizes);
+					layer[n] = new Layer(tokens.nextToken());
 				}
 			}
 		}catch(IOException ex){

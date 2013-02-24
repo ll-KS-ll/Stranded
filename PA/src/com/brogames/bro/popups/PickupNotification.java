@@ -7,7 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
-import android.os.Bundle;
+
 import com.brogames.bro.objecttypes.items.Item;
 import com.core.ks.InputObject;
 import com.core.ks.Popup;
@@ -20,7 +20,6 @@ public class PickupNotification extends Popup {
 	private Paint paintFrame = new Paint();
 	private Paint imageObserver = new Paint();
 	private int x, y;
-	private int tileWidth, tileHeight, screenWidth, screenHeight;
 	private long lastTimer;
 	private Matrix matrix;
 	private Bitmap bmp;
@@ -28,14 +27,8 @@ public class PickupNotification extends Popup {
 	private RectF toast, itemBackground;
 	private int timeVisible = 1500;
 	
-	public PickupNotification(Item item, Bundle sizes) {
+	public PickupNotification(Item item) {
 		super();
-		
-		// Basic values
-		tileWidth = sizes.getInt("boardWidth");
-		tileHeight = sizes.getInt("boardHeight");
-		screenWidth = sizes.getInt("screenWidth");
-		screenHeight = sizes.getInt("screenHeight");
 		
 		// Full transparency 
 		color.setARGB(0, 0, 0, 0);

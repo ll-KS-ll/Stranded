@@ -3,14 +3,13 @@ package com.brogames.bro;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Bundle;
 
 import com.brogames.bro.objecttypes.Empty;
 import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.objecttypes.ObjectType;
+import com.brogames.bro.objecttypes.TileObject;
 import com.brogames.bro.objecttypes.items.Item;
 import com.brogames.bro.objecttypes.objects.Environment;
-import com.brogames.bro.objecttypes.TileObject;
 
 public class Tile {
 
@@ -19,11 +18,11 @@ public class Tile {
 	private int tileWidth, tileHeight;
 	private Paint color = new Paint();
 
-	public Tile(int objectType, int x, int y, Bundle sizes) {
+	public Tile(int objectType, int x, int y) {
 		object = ObjectHandler.setTileObject(objectType);
 
-		tileWidth = sizes.getInt("boardWidth");
-		tileHeight = sizes.getInt("boardHeight");
+		tileWidth = LaunchView.TILE_WIDTH;
+		tileHeight = LaunchView.TILE_HEIGHT;
 	}
 
 	// ITEM

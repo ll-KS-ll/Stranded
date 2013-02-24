@@ -2,7 +2,6 @@ package com.brogames.bro;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Bundle;
 
 import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.objecttypes.items.Item;
@@ -18,35 +17,35 @@ public class Menu {
 	private Bitmap buttonUp, buttonDown;
 	private Bitmap map, notes;
 	private Bitmap bmpEquip;
-	private int boardWidth, boardHeight, width;
+	private int tileWidth, tileHeight, width;
 	private int hungerIndex = 0, thirstIndex = 0;
 	private String message;
 
-	public Menu(Bitmap bmp, int equipType, Bundle boardSize) {
-		int bw = boardSize.getInt("boardWidth");
-		int bh = boardSize.getInt("boardHeight");
+	public Menu(Bitmap bmp, int equipType) {
+		int tw = LaunchView.TILE_WIDTH;
+		int th = LaunchView.TILE_HEIGHT;
 		isOpen = false;
 		Item equip = ObjectHandler.setItem(equipType);
 		if(equip != null)
 			bmpEquip = equip.getBmp();
 		
-		background = Bitmap.createBitmap(bmp, bw, bh * 4, bw, bh);
-		bag = Bitmap.createBitmap(bmp, bw * 0, bh * 0, bw * 2, bh * 3);
+		background = Bitmap.createBitmap(bmp, tw, th * 4, tw, th);
+		bag = Bitmap.createBitmap(bmp, tw * 0, th * 0, tw * 2, th * 3);
 		
-		buttonUp = Bitmap.createBitmap(bmp, bw * 0, bh * 3, bw, bh);
-		buttonDown = Bitmap.createBitmap(bmp, bw, bh * 3, bw, bh);
+		buttonUp = Bitmap.createBitmap(bmp, tw * 0, th * 3, tw, th);
+		buttonDown = Bitmap.createBitmap(bmp, tw, th * 3, tw, th);
 
-		map = Bitmap.createBitmap(bmp, bw * 2, bh * 3, bw, bh);
-		notes = Bitmap.createBitmap(bmp, bw * 3, bh * 3, bw, bh);
+		map = Bitmap.createBitmap(bmp, tw * 2, th * 3, tw, th);
+		notes = Bitmap.createBitmap(bmp, tw * 3, th * 3, tw, th);
 
 		for (int n = 0; n < hunger.length; n++)
-			hunger[n] = Bitmap.createBitmap(bmp, bw * (n + 2), bh * 0, bw, bh);
+			hunger[n] = Bitmap.createBitmap(bmp, tw * (n + 2), th * 0, tw, th);
 
 		for (int n = 0; n < thirst.length; n++)
-			thirst[n] = Bitmap.createBitmap(bmp, bw * (n + 2), bh * 2, bw, bh);
+			thirst[n] = Bitmap.createBitmap(bmp, tw * (n + 2), th * 2, tw, th);
 
-		boardWidth = bw;
-		boardHeight = bh;
+		tileWidth = tw;
+		tileHeight = th;
 	}
 
 	public void tick(Item equip, int hunger, int thirst) {
@@ -83,39 +82,39 @@ public class Menu {
 	}
 
 	public void render(Canvas canvas) {
-		int top = canvas.getHeight() - boardHeight;
+		int top = canvas.getHeight() - tileHeight;
 		width = canvas.getWidth();
 
 		if (isOpen) {
-			for (int n = 0; n <= canvas.getWidth(); n += boardWidth)
+			for (int n = 0; n <= canvas.getWidth(); n += tileWidth)
 				canvas.drawBitmap(background, n, top, null);
 
-			canvas.drawBitmap(buttonDown, width - boardWidth, top, null);
-			canvas.drawBitmap(hunger[hungerIndex], width - boardWidth * 2, top, null);
-			canvas.drawBitmap(thirst[thirstIndex], width - boardWidth * 3, top, null);
-			canvas.drawBitmap(map, width - boardWidth * 5, top, null);
-			canvas.drawBitmap(notes, width - boardWidth * 6, top, null);
-			canvas.drawBitmap(bag, 0, top - boardHeight * 2, null);
+			canvas.drawBitmap(buttonDown, width - tileWidth, top, null);
+			canvas.drawBitmap(hunger[hungerIndex], width - tileWidth * 2, top, null);
+			canvas.drawBitmap(thirst[thirstIndex], width - tileWidth * 3, top, null);
+			canvas.drawBitmap(map, width - tileWidth * 5, top, null);
+			canvas.drawBitmap(notes, width - tileWidth * 6, top, null);
+			canvas.drawBitmap(bag, 0, top - tileHeight * 2, null);
 			
 			if(bmpEquip != null)
-				canvas.drawBitmap(bmpEquip, boardWidth*3, top, null);
+				canvas.drawBitmap(bmpEquip, tileWidth*3, top, null);
 			
 		} else {
-			canvas.drawBitmap(buttonUp, width - boardWidth, top, null);
+			canvas.drawBitmap(buttonUp, width - tileWidth, top, null);
 		}
 	}
 
 	public void processInput(InputObject input, Popup popup) {
 		
 		// Right down button
-		if (width - input.x < boardWidth)
+		if (width - input.x < tileWidth)
 			close();
 		// Bag
-		if (input.x < boardWidth * 2)
+		if (input.x < tileWidth * 2)
 			popup.setPopup(6);
 
 		// Hunger icon
-		if (input.x > width - boardWidth * 2 && input.x < width - boardWidth) {
+		if (input.x > width - tileWidth * 2 && input.x < width - tileWidth) {
 			switch (hungerIndex) {
 			case 0:
 				message = "I'm not hungry at all.";
@@ -147,7 +146,7 @@ public class Menu {
 		}
 		
 		// Thirst icon
-		if (input.x > width - boardWidth*3 && input.x < width - boardWidth*2) {
+		if (input.x > width - tileWidth*3 && input.x < width - tileWidth*2) {
 			switch (thirstIndex) {
 			case 0:
 				message = "I'm not thirsty all.";
@@ -167,19 +166,19 @@ public class Menu {
 
 		
 		// Map icon
-		if (input.x > width - boardWidth * 5 && input.x < width - boardWidth*4) {
+		if (input.x > width - tileWidth * 5 && input.x < width - tileWidth*4) {
 			message = "I haven't discovered anything yet.";
 			popup.setPopup(5);
 		}
 		
 		// Notes icon
-		if (input.x > width - boardWidth * 6 && input.x < width - boardWidth*5) {
+		if (input.x > width - tileWidth * 6 && input.x < width - tileWidth*5) {
 			message = "I haven't made any notes yet.";
 			popup.setPopup(5);
 		}
 		
 		// Notes icon
-		if (input.x > boardWidth * 3 && input.x < boardWidth*4) {
+		if (input.x > tileWidth * 3 && input.x < tileWidth*4) {
 			message = "This is what I've equipped to use.";
 			popup.setPopup(5);
 		}

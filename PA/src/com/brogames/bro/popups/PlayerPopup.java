@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
-import android.os.Bundle;
 
 import com.brogames.bro.Player;
 import com.brogames.bro.R;
@@ -21,7 +20,7 @@ import com.core.ks.Popup;
 
 public class PlayerPopup extends Popup {
 
-	private int tileWidth, tileHeight, screenWidth, screenHeight, objWidth, objHeight;
+	private int objWidth, objHeight;
 	private int x, y, rows, cols;
 	private float scale;
 
@@ -41,14 +40,9 @@ public class PlayerPopup extends Popup {
 	private Paint textStyle = new Paint();
 	private Matrix playerMatrix = new Matrix();
 	
-	public PlayerPopup(Resources res, Player player, Bundle sizes) {
+	public PlayerPopup(Resources res, Player player) {
 		super();
 
-		// Set up core values
-		tileWidth = sizes.getInt("boardWidth");
-		tileHeight = sizes.getInt("boardHeight");
-		screenWidth = sizes.getInt("screenWidth");
-		screenHeight = sizes.getInt("screenHeight");
 		objWidth = 2 * tileWidth;
 		objHeight = 2 * tileHeight;
 

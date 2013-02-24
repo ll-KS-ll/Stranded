@@ -39,9 +39,9 @@ public class Player {
 	public static final int RIGHT = 2;
 	public static final int LEFT = 3;
 
-	public Player(Bitmap character, Bundle sizes, Bundle bundle, Popup popup, Tile[][] objectLayer) {
-		tileWidth = sizes.getInt("boardWidth");
-		tileHeight = sizes.getInt("boardHeight");
+	public Player(Bitmap character, Bundle bundle, Popup popup, Tile[][] objectLayer) {
+		tileWidth = LaunchView.TILE_WIDTH;
+		tileHeight = LaunchView.TILE_HEIGHT;
 		
 		this.objectLayer = objectLayer;
 

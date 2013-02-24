@@ -21,9 +21,9 @@ public class LaunchView extends GameView {
 
 	public static final int MAP_WIDTH = 60;
 	public static final int MAP_HEIGHT = 40;
-
-	private int tileWidth, tileHeight, screenWidth, screenHeight;
-	private Bundle sizes;
+	public static int TILE_WIDTH, TILE_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT;
+	
+	private int tileWidth, tileHeight, screenHeight, screenWidth;
 	private String current_section, new_section;
 	private Layer[] layer;
 	private Tile[][] backgroundLayer;
@@ -36,7 +36,7 @@ public class LaunchView extends GameView {
 	private Menu menu;
 	private Player player;
 	private Interact interact;
-
+	
 	public LaunchView(Context context) {
 		super(context);
 	}
@@ -45,21 +45,15 @@ public class LaunchView extends GameView {
 	public LaunchView(Context context, Bundle bundle) {
 		super(context);
 
-		tileWidth = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
-		tileHeight = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
-		screenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
-		screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
+		tileWidth = TILE_WIDTH = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
+		tileHeight = TILE_HEIGHT = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
+		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
+		screenHeight = SCREEN_HEIGHT = getContext().getResources().getDisplayMetrics().heightPixels;
 
-		sizes = new Bundle();
-		sizes.putInt("boardWidth", tileWidth);
-		sizes.putInt("boardHeight", tileHeight);
-		sizes.putInt("screenWidth", screenWidth);
-		sizes.putInt("screenHeight", screenHeight);
-
-		getImage = new ImageGetter(context, sizes);
+		getImage = new ImageGetter(getResources());
 
 		current_section = new_section = bundle.getString("section");
-		Map.loadMap(context, current_section, sizes);
+		Map.loadMap(context, current_section);
 		layer = Map.getLayers();
 		backgroundLayer = layer[0].getTiles();
 		objectLayer = layer[1].getTiles();
@@ -67,9 +61,9 @@ public class LaunchView extends GameView {
 
 		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(), R.drawable.character);
 		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
-		player = new Player(bmpChar, sizes, bundle, popup, objectLayer);
-		camera = new Camera(sizes);
-		menu = new Menu(menuSheet, bundle.getInt("equip"), sizes);
+		player = new Player(bmpChar, bundle, popup, objectLayer);
+		camera = new Camera();
+		menu = new Menu(menuSheet, bundle.getInt("equip"));
 		interact = new Interact(player, objectLayer, topLayer);
 		bmpChar.recycle();
 		menuSheet.recycle();
@@ -82,7 +76,7 @@ public class LaunchView extends GameView {
 	public void update() {
 		super.update();
 		player.tick(objectLayer, popup);
-		camera.tick(layer, player, getWidth(), getHeight());
+		camera.tick(layer, player);
 		menu.tick(player.getBag().getEquipedItem(), player.getHunger(), player.getThirst());
 
 		if (player.changeSection()) {
@@ -190,10 +184,10 @@ public class LaunchView extends GameView {
 	public void checkPopup() {
 		switch (popup.checkPopup()) {
 		case 1: // Opens player info screen
-			popup = new PlayerPopup(getResources(), player, sizes);
+			popup = new PlayerPopup(getResources(), player);
 			break;
 		case 3: // Opens PickupNotigication
-			popup = new PickupNotification(player.getBag().ItemFound(), sizes);
+			popup = new PickupNotification(player.getBag().ItemFound());
 			break;
 		case 4: // Opens GameOver-screen
 			popup = new GameOverScreen(this);
@@ -204,7 +198,7 @@ public class LaunchView extends GameView {
 			popup = new Message(menu.getMessage(), getWidth(), getHeight());
 			break;
 		case 6: // Opens inventory
-			popup = new Inventory(getResources(), player.getBag(), sizes,
+			popup = new Inventory(getResources(), player.getBag(),
 					objectLayer[player.getBoardIndexX()][player
 							.getBoardIndexY()]);
 			break;
@@ -263,7 +257,4 @@ public class LaunchView extends GameView {
 		}
 	}
 
-	public Bundle getSizesBundle() {
-		return sizes;
-	}
 }

@@ -1,22 +1,21 @@
 package com.brogames.bro;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 
 import com.brogames.bro.objecttypes.ObjectType;
 
 public class ImageGetter {
 
 	private static Bitmap objBitmap, itemBitmap;
-	private static int bw, bh;
+	private static int tw, th;
 
-	public ImageGetter(Context context, Bundle boardSize) {
-		objBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.environment);
-		itemBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.items);
-		bw = boardSize.getInt("boardWidth");
-		bh = boardSize.getInt("boardHeight");
+	public ImageGetter(Resources res) {
+		objBitmap = BitmapFactory.decodeResource(res, R.drawable.environment);
+		itemBitmap = BitmapFactory.decodeResource(res, R.drawable.items);
+		tw = LaunchView.TILE_WIDTH;
+		th = LaunchView.TILE_HEIGHT;
 	}
 	
 	/**
@@ -54,7 +53,7 @@ public class ImageGetter {
 		Bitmap bmp = null;
 		String id = key;
 		if (MemoryCache.get(id) == null){
-				MemoryCache.put(id,Bitmap.createBitmap(bitmap, bw*col, bh * row, bw, bh));
+				MemoryCache.put(id,Bitmap.createBitmap(bitmap, tw*col, th * row, tw, th));
 			bmp = MemoryCache.get(id);
 		}else{
 			bmp = MemoryCache.get(id);
@@ -70,7 +69,7 @@ public class ImageGetter {
 		
 		for(int i=0; i<bmp.length; i++){
 			if (MemoryCache.get(Integer.toString(type+i)) == null){
-				MemoryCache.put(Integer.toString(type+i),Bitmap.createBitmap(objBitmap, bw*(i+col), bh * row, bw, bh));
+				MemoryCache.put(Integer.toString(type+i),Bitmap.createBitmap(objBitmap, tw*(i+col), th * row, tw, th));
 				bmp[i] = MemoryCache.get(Integer.toString(type+i));
 			}else{
 				bmp[i] = MemoryCache.get(Integer.toString(type+i));

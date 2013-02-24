@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.brogames.bro.Bag;
@@ -20,7 +19,7 @@ import com.core.ks.Popup;
 public class Inventory extends Popup {
 
 	// Core stuff
-	private int tileWidth, tileHeight, screenWidth, screenHeight, objWidth, objHeight;
+	private int objWidth, objHeight;
 	private int x, y, rows, cols;
 	private float scale;
 	private CraftSystem craftSys;
@@ -39,13 +38,9 @@ public class Inventory extends Popup {
 	private Canvas bagCanvas;
 	// http://www.youtube.com/watch?v=Eq3CuMDXaPs
 
-	public Inventory(Resources res, Bag bag, Bundle sizes, Tile tile) {
+	public Inventory(Resources res, Bag bag, Tile tile) {
 		super(); // Call super or die!
 
-		tileWidth = sizes.getInt("boardWidth");
-		tileHeight = sizes.getInt("boardHeight");
-		screenWidth = sizes.getInt("screenWidth");
-		screenHeight = sizes.getInt("screenHeight");
 		objWidth = 2 * tileWidth;
 		objHeight = 2 * tileHeight;
 
@@ -68,7 +63,6 @@ public class Inventory extends Popup {
 			matrix.setRotate(90);
 			background = Bitmap.createBitmap(tempBmp, 0, 0, tempBmp.getWidth(), tempBmp.getHeight(), matrix, true);
 		}
-		//tempBmp.recycle();
 		
 		// Check if scaling down the bag to fit screen is necessary
 		if(tileWidth * rows > screenWidth || tileHeight * cols > screenHeight){
@@ -111,7 +105,7 @@ public class Inventory extends Popup {
 		int yText = tileHeight + tileHeight / 4 * 2 + objHeight * 2;
 		Bitmap normal = BitmapFactory.decodeResource(res, R.drawable.button_normal);
 		Bitmap pressed = BitmapFactory.decodeResource(res, R.drawable.button_pressed);
-		buttons = new BagButtons(normal, pressed, sizes, xText, yText);
+		buttons = new BagButtons(normal, pressed, xText, yText);
 		
 		// Setup canvas and bitmap to paint bag on
 		bagBitmap = Bitmap.createBitmap(tileWidth*rows, tileHeight*cols, Bitmap.Config.ARGB_8888);

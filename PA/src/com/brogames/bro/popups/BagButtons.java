@@ -6,8 +6,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
-import android.os.Bundle;
 
+import com.brogames.bro.LaunchView;
 import com.core.ks.InputObject;
 import com.core.ks.Timer;
 
@@ -17,7 +17,7 @@ public class BagButtons {
 	private boolean[] active = new boolean[text.length];
 	private Paint[] textStyle = new Paint[text.length];
 	private int xText[] = new int[text.length], yText[] = new int[text.length];
-	private int boardWidth, boardHeight, textSize;
+	private int tileWidth, tileHeight, textSize;
 	private Paint bg = new Paint();
 	private Bitmap[] bmp = new Bitmap[text.length];
 	private Bitmap btnPressed, btnNormal;
@@ -31,37 +31,39 @@ public class BagButtons {
 	public static final int DROP_BUTTON = 4;
 	public static final int CLOSE_BUTTON = 5;
 	
-	public BagButtons(Bitmap btnNormal, Bitmap btnPressed, Bundle sizes, int xPos, int yPos) {
-		boardWidth = sizes.getInt("boardWidth");
-		boardHeight = sizes.getInt("boardHeight");
+	public BagButtons(Bitmap btnNormal, Bitmap btnPressed, int xPos, int yPos) {
+		tileWidth = LaunchView.TILE_WIDTH;
+		tileHeight = LaunchView.TILE_HEIGHT;
+		int screenWidth = LaunchView.SCREEN_WIDTH;
+		int screenHeight = LaunchView.SCREEN_HEIGHT;
 
 		bg.setColor(Color.RED);
 		
-		if(sizes.getInt("screenWidth") > sizes.getInt("screenHeight")){
+		if(screenWidth > screenHeight){
 			this.btnNormal = btnNormal;
 			this.btnPressed = btnPressed;
 			for (int n = 0; n < xText.length; n++)
 				xText[n] = xPos;
 			for (int n = 0; n < yText.length; n++)
-				yText[n] = yPos + boardHeight * n + boardHeight / 6 * n;
+				yText[n] = yPos + tileHeight * n + tileHeight / 6 * n;
 		}else{
 			Matrix m = new Matrix();
 			m.setScale(0.75f, 1);
 			this.btnNormal = Bitmap.createBitmap(btnNormal, 0, 0, btnNormal.getWidth(), btnNormal.getHeight(), m, true);
 			this.btnPressed = Bitmap.createBitmap(btnPressed, 0, 0, btnPressed.getWidth(), btnPressed.getHeight(), m, true);;
 			for (int n = 0; n < xText.length; n+=2)
-				xText[n] = boardWidth;
+				xText[n] = tileWidth;
 			for (int n = 1; n < xText.length; n+=2)
-				xText[n] = boardWidth + this.btnNormal.getWidth() + boardWidth / 5;
-			yText[0] = boardHeight * 15 - 2*(boardHeight / 3);
-			yText[1] = boardHeight * 15 - 2*(boardHeight / 3);
-			yText[2] = boardHeight * 17;
-			yText[3] = boardHeight * 16 - boardHeight / 3;
-			yText[4] =  boardHeight * 16 - boardHeight / 3;
-			yText[5] =  boardHeight * 17;
+				xText[n] = tileWidth + this.btnNormal.getWidth() + tileWidth / 5;
+			yText[0] = tileHeight * 15 - 2*(tileHeight / 3);
+			yText[1] = tileHeight * 15 - 2*(tileHeight / 3);
+			yText[2] = tileHeight * 17;
+			yText[3] = tileHeight * 16 - tileHeight / 3;
+			yText[4] =  tileHeight * 16 - tileHeight / 3;
+			yText[5] =  tileHeight * 17;
 		}
 		
-		textSize = (int) (boardHeight / 1.6f);
+		textSize = (int) (tileHeight / 1.6f);
 		for (int n = 0; n < textStyle.length; n++) {
 			textStyle[n] = new Paint();
 			textStyle[n].setTextSize(textSize);
@@ -98,7 +100,7 @@ public class BagButtons {
 	
 	public int wasPressed(InputObject input) {
 		for (int n = 0; n < yText.length; n++)
-			if(input.x > xText[n] && input.y > yText[n] && input.x < xText[n] + boardWidth*4 && input.y < yText[n] + boardHeight && active[n]){
+			if(input.x > xText[n] && input.y > yText[n] && input.x < xText[n] + tileWidth*4 && input.y < yText[n] + tileHeight && active[n]){
 				pressed(n);
 				return n;
 			}
