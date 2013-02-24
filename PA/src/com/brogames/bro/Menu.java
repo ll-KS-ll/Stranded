@@ -20,7 +20,8 @@ public class Menu {
 	private int tileWidth, tileHeight, width;
 	private int hungerIndex = 0, thirstIndex = 0;
 	private String message;
-
+	private int offset;
+	
 	public Menu(Bitmap bmp, int equipType) {
 		int tw = LaunchView.TILE_WIDTH;
 		int th = LaunchView.TILE_HEIGHT;
@@ -44,6 +45,13 @@ public class Menu {
 		for (int n = 0; n < thirst.length; n++)
 			thirst[n] = Bitmap.createBitmap(bmp, tw * (n + 2), th * 2, tw, th);
 
+		// New code
+		if(LaunchView.SCREEN_WIDTH / tw > 10)
+			offset = 1;
+		else
+			offset = 0;
+		
+		
 		tileWidth = tw;
 		tileHeight = th;
 	}
@@ -90,14 +98,14 @@ public class Menu {
 				canvas.drawBitmap(background, n, top, null);
 
 			canvas.drawBitmap(buttonDown, width - tileWidth, top, null);
-			canvas.drawBitmap(hunger[hungerIndex], width - tileWidth * 2, top, null);
-			canvas.drawBitmap(thirst[thirstIndex], width - tileWidth * 3, top, null);
-			canvas.drawBitmap(map, width - tileWidth * 5, top, null);
-			canvas.drawBitmap(notes, width - tileWidth * 6, top, null);
+			canvas.drawBitmap(hunger[hungerIndex], width - tileWidth * (2+offset), top, null);
+			canvas.drawBitmap(thirst[thirstIndex], width - tileWidth * (3+offset), top, null);
+			canvas.drawBitmap(map, width - tileWidth * (5+offset), top, null);
+			canvas.drawBitmap(notes, width - tileWidth * (6+offset), top, null);
 			canvas.drawBitmap(bag, 0, top - tileHeight * 2, null);
 			
 			if(bmpEquip != null)
-				canvas.drawBitmap(bmpEquip, tileWidth*3, top, null);
+				canvas.drawBitmap(bmpEquip, tileWidth*(2+offset), top, null);
 			
 		} else {
 			canvas.drawBitmap(buttonUp, width - tileWidth, top, null);

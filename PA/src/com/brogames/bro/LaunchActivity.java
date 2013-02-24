@@ -67,7 +67,6 @@ public class LaunchActivity extends GameActivity {
 			writer.close();
 			outputStreamWriter.close();
 			outputStream.close();
-			Log.d(this.toString(), "Cleaned up buffers");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
