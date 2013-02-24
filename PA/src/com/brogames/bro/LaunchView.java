@@ -22,11 +22,9 @@ public class LaunchView extends GameView {
 	public static final int MAP_WIDTH = 60;
 	public static final int MAP_HEIGHT = 40;
 
-	private int tileWidth, tileHeight;
+	private int tileWidth, tileHeight, screenWidth, screenHeight;
 	private Bundle sizes;
 	private String current_section, new_section;
-	private Player player;
-	private Camera camera;
 	private Layer[] layer;
 	private Tile[][] backgroundLayer;
 	private Tile[][] objectLayer;
@@ -34,11 +32,10 @@ public class LaunchView extends GameView {
 	@SuppressWarnings("unused")
 	// It's actually used retard! -.-
 	private ImageGetter getImage;
+	private Camera camera;
 	private Menu menu;
+	private Player player;
 	private Interact interact;
-	// Filip stuff, should be in Bundle sizes.
-	private int screenWidth, screenHeight;
-	private int x, y;
 
 	public LaunchView(Context context) {
 		super(context);
@@ -50,7 +47,6 @@ public class LaunchView extends GameView {
 
 		tileWidth = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		tileHeight = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
-
 		screenHeight = getContext().getResources().getDisplayMetrics().heightPixels;
 		screenWidth = getContext().getResources().getDisplayMetrics().widthPixels;
 
@@ -83,8 +79,8 @@ public class LaunchView extends GameView {
 	}
 
 	// Update
-	public void tick() {
-		super.tick();
+	public void update() {
+		super.update();
 		player.tick(objectLayer, popup);
 		camera.tick(layer, player, getWidth(), getHeight());
 		menu.tick(player.getBag().getEquipedItem(), player.getHunger(), player.getThirst());
@@ -118,13 +114,8 @@ public class LaunchView extends GameView {
 	// Draw graphics
 	@Override
 	public void render(Canvas canvas) {
-		canvas = getReadyCanvas(canvas);
-		if (ready()) {
-			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), background);
-			camera.draw(canvas, player);
-			menu.render(canvas);
-		}
-		postCanvas(canvas);
+		camera.draw(canvas, player);
+		menu.render(canvas);
 	}
 
 	// Input
@@ -162,13 +153,11 @@ public class LaunchView extends GameView {
 
 	public void move(InputObject input) {
 		if (player.readyToMove()) {
-
+			int x, y;
 			if (player.getX() < screenWidth / 2)
 				x = (int) (input.x / tileWidth);
-			else if (player.getX() > (LaunchView.MAP_WIDTH * tileWidth)
-					- (screenWidth / 2))
-				x = (int) (LaunchView.MAP_WIDTH - (screenWidth / tileWidth) + input.x
-						/ tileWidth);
+			else if (player.getX() > (LaunchView.MAP_WIDTH * tileWidth) - (screenWidth / 2))
+				x = (int) (LaunchView.MAP_WIDTH - (screenWidth / tileWidth) + input.x / tileWidth);
 			else
 				x = (int) (((input.x - screenWidth / 2) + player.getX()) / tileWidth);
 

@@ -86,7 +86,7 @@ public class GameLoop implements Runnable {
 		if (shouldRender) {
 			frames++;
 
-			gameview.render(canvas);
+			gameview.renderGraphics(canvas);
 
 			long renderTime = System.nanoTime();
 			int timePassed = (int) (renderTime - lastRenderTime);

@@ -40,7 +40,7 @@ public class GameView extends SurfaceView {
 		popup.close();
 	}
 
-	/** Update game logic*/
+	/** Update core logics*/
 	public void tick() {
 		switch(state){
 		case PAUSED: 
@@ -48,6 +48,7 @@ public class GameView extends SurfaceView {
 			break;
 		case RUNNING:
 			processInput(); // Update inputs
+			update();
 			break;
 		case STOP:
 			processInput(); // Update inputs
@@ -55,7 +56,10 @@ public class GameView extends SurfaceView {
 		case RESTART:
 			break;
 		}
-		
+	}
+	
+	/** Update game logic. */
+	public void update(){
 		popIsUp = popup.getState();
 		if (popIsUp)
 			popup.tick();
@@ -66,52 +70,35 @@ public class GameView extends SurfaceView {
 	/**Check if there is a pop up window to open.*/
 	public void checkPopup(){}
 	
-	/** Draw graphics
-	 * @param canvas - canvas to paint graphics on 
+	/** Render method called by GameLoop. 
+	 * Don't override this method, see {@link public void render(Canvas canvas)} instead.
+	 * If the holder isn't valid yet then overriding this will cause an runtime error.
+	 * 
+	 * @param canvas - canvas to render graphics on 
 	 */
-	public void render(Canvas canvas) {
+	public void renderGraphics(Canvas canvas) {
 		if (holder.getSurface().isValid()) {
 			canvas = holder.lockCanvas(); // Prepare canvas to be used
 
 			// Repaint all with black
 			canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), background);
 			
-			holder.unlockCanvasAndPost(canvas); // Show the painted canvas
-		}
-	}
-	
-
-	/** Get if surface is ready to be used
-	 * @return boolean - returns true if surface is ready to be used, false otherwise.
-	 */
-	public boolean ready(){
-		if (holder.getSurface().isValid())
-			return true;
-		return false;
-	}
-	
-	
-	/** Get a canvas ready to be painted
-	 *	@param canvas - canvas to be readied for painting
-	 *	@return canvas - readied canvas to paint on
-	 */
-	public Canvas getReadyCanvas(Canvas canvas){
-		if (holder.getSurface().isValid())
-			canvas = holder.lockCanvas(); // Prepare canvas to be used
-		return canvas;
-	}
-	
-	
-	/** Show drawn graphics on screen
-	 * @param canvas - canvas to shown on screen
-	 */
-	public void postCanvas(Canvas canvas){
-		if (holder.getSurface().isValid()){
+			render(canvas);
+			
 			if (popIsUp)
 				popup.render(canvas);
+			
 			holder.unlockCanvasAndPost(canvas); // Show the painted canvas
 		}
 	}
+	
+	/** This method should be overridden with the game's render.
+	 *  Here is where all graphics should be rendered and then shown
+	 *  on screen. 
+	 * @param canvas - canvas graphics will be rendered on.
+	 */
+	public void render(Canvas canvas){}
+
 	
 	/**Feed inputs for later processing. 
 	 * @param input - InputObject to add to processing
