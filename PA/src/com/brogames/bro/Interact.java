@@ -15,6 +15,7 @@ public class Interact {
 	private Tile[][] objectLayer, topLayer;
 	private int[] consequences;
 	private int interactX, interactY;
+	private boolean didSomething;
 
 	public Interact(Player player, Tile[][] objectLayer, Tile[][] topLayer) {
 		super(); // Call super or die!
@@ -23,6 +24,8 @@ public class Interact {
 		
 		this.objectLayer = objectLayer;
 		this.topLayer = topLayer;
+		
+		didSomething = false;
 	}
 
 	/* Worthless method!
@@ -33,6 +36,7 @@ public class Interact {
 	 *  Best regards K-S
 	 */
 	public void consequences(Popup popup) {
+		didSomething = false;
 		Item tool = bag.getEquipedItem();
 		int objectType = objectLayer[interactX][interactY].getObject().getObjectType();
 		consequences = tool.getConsequences(objectType);
@@ -42,30 +46,40 @@ public class Interact {
 			switch (consequences[0]) {
 			case REMOVE:
 				objectLayer[interactX][interactY].removeObject();
+				didSomething = true;
 				break;
 			case REPLACE:
 				objectLayer[interactX][interactY].addObject(consequences[2]);
+				didSomething = true;
 			case REMOVE_PALM:
 				topLayer[interactX][interactY-1].removeObject();
 				objectLayer[interactX][interactY].removeObject();
+				didSomething = true;
 				break;
 			case ADD:
 				objectLayer[interactX][interactY].addObject(consequences[2]);
+				didSomething = true;
+				break;
 			}
 		
 			// What to get?
 			if (consequences[1] > 0){
 				 bag.insertItem(ObjectHandler.setItem(consequences[1]));
 				 popup.setPopup(3);
+				 didSomething = true;
 			}
 				 
 			// What to add?
-			if (consequences[2] > 0)
+			if (consequences[2] > 0){
 				objectLayer[interactX][interactY].addObject(consequences[2]);
+				didSomething = true;
+			}
 			
 			// Remove equipped item?
-			if (consequences[3] == 1)
+			if (consequences[3] == 1){
 				bag.removeItem(tool);
+				didSomething = true;
+			}
 			
 		}
 	}
@@ -92,5 +106,9 @@ public class Interact {
 		interactX = boardIndexX - 1;
 		interactY = boardIndexY;
 		consequences(popup);
+	}
+	
+	public boolean didSomething(){
+		return didSomething;
 	}
 }

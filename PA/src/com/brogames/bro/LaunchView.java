@@ -35,7 +35,6 @@ public class LaunchView extends GameView {
 	private Camera camera;
 	private Menu menu;
 	private Player player;
-	private Interact interact;
 	
 	public LaunchView(Context context) {
 		super(context);
@@ -61,10 +60,9 @@ public class LaunchView extends GameView {
 
 		Bitmap bmpChar = BitmapFactory.decodeResource(getResources(), R.drawable.character);
 		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
-		player = new Player(bmpChar, bundle, popup, objectLayer);
+		player = new Player(bmpChar, bundle, popup, objectLayer, topLayer);
 		camera = new Camera();
 		menu = new Menu(menuSheet, bundle.getInt("equip"));
-		interact = new Interact(player, objectLayer, topLayer);
 		bmpChar.recycle();
 		menuSheet.recycle();
 
@@ -130,19 +128,19 @@ public class LaunchView extends GameView {
 	}
 
 	protected void onSwipeRight() {
-		interact.right(player.getBoardIndexX(), player.getBoardIndexY(), popup);
+		player.interactRight(popup);
 	}
 
 	protected void onSwipeLeft() {
-		interact.left(player.getBoardIndexX(), player.getBoardIndexY(), popup);
+		player.interactLeft(popup);
 	}
 
 	protected void onSwipeTop() {
-		interact.up(player.getBoardIndexX(), player.getBoardIndexY(), popup);
+		player.interactUp(popup);
 	}
 
 	protected void onSwipeBottom() {
-		interact.down(player.getBoardIndexX(), player.getBoardIndexY(), popup);
+		player.interactDown(popup);
 	}
 
 	public void move(InputObject input) {
@@ -186,6 +184,9 @@ public class LaunchView extends GameView {
 		case 1: // Opens player info screen
 			popup = new PlayerPopup(getResources(), player);
 			break;
+		case 2: // Opens a player tiered message
+			popup = new Message("I'm to tired right now.", getWidth(), getHeight());
+			break;
 		case 3: // Opens PickupNotigication
 			popup = new PickupNotification(player.getBag().ItemFound());
 			break;
@@ -198,9 +199,7 @@ public class LaunchView extends GameView {
 			popup = new Message(menu.getMessage(), getWidth(), getHeight());
 			break;
 		case 6: // Opens inventory
-			popup = new Inventory(getResources(), player.getBag(),
-					objectLayer[player.getBoardIndexX()][player
-							.getBoardIndexY()]);
+			popup = new Inventory(getResources(), player.getBag(), objectLayer[player.getBoardIndexX()][player.getBoardIndexY()]);
 			break;
 		}
 	}
@@ -216,6 +215,8 @@ public class LaunchView extends GameView {
 			return player.getThirst();
 		if (key.equals("equip"))
 			return player.getBag().getIntData();
+		if (key.equals("stamina"))
+			return player.getStamina();
 		return -1;
 	}
 

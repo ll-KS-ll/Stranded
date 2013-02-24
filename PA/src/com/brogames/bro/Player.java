@@ -28,18 +28,25 @@ public class Player {
 	private boolean readyToMove, stop, foundPath;
 	private Node node;
 	private Bag bag;
+	private Interact interact;
 	private int hunger, thirst;
 	private long lastTimer;
 	private static final int playerHealthUpdateTime = 3000;
 	private boolean changeSection;
 	private Tile[][] objectLayer;
 	
+	private int stamina;
+	
+	public static final int MAX_STAMINA = 10000;
+	
 	public static final int DOWN = 0;
 	public static final int UP = 1;
 	public static final int RIGHT = 2;
 	public static final int LEFT = 3;
 
-	public Player(Bitmap character, Bundle bundle, Popup popup, Tile[][] objectLayer) {
+	public Player(){}
+	
+	public Player(Bitmap character, Bundle bundle, Popup popup, Tile[][] objectLayer, Tile[][] topLayer) {
 		tileWidth = LaunchView.TILE_WIDTH;
 		tileHeight = LaunchView.TILE_HEIGHT;
 		
@@ -88,6 +95,7 @@ public class Player {
 		frames = 0;
 		
 		bag = new Bag(bundle.getString("bag"), bundle.getInt("equip"));
+		interact = new Interact(this, objectLayer, topLayer);
 		
 		pathfinder = new PathFinder();
 		readyToMove = true;
@@ -98,6 +106,8 @@ public class Player {
 		lastTimer = System.currentTimeMillis();
 		
 		changeSection = false;
+		
+		stamina = bundle.getInt("stamina");
 	}
 
 	public void tick(Tile[][] itemLayer, Popup popup) {
@@ -183,6 +193,14 @@ public class Player {
 				
 		}
 
+		// Stamina 
+		if(stamina < MAX_STAMINA){
+			if(stamina + timePassed <= MAX_STAMINA)
+				stamina += timePassed/10;
+			else
+				stamina = MAX_STAMINA;
+		}
+		
 		lastMoved = System.currentTimeMillis();
 		
 		if (System.currentTimeMillis() - lastTimer > playerHealthUpdateTime) {
@@ -284,6 +302,46 @@ public class Player {
 		popup.setPopup(1);
 	}
 	
+	public void interactUp(Popup popup){
+		if(stamina >=  8500){
+			interact.up(boardIndexX, boardIndexY, popup);
+			if(interact.didSomething())
+				stamina-=5000;
+		}else{
+			popup.setPopup(2);
+		}
+	}
+	
+	public void interactDown(Popup popup){
+		if(stamina >=  8500){
+			interact.down(boardIndexX, boardIndexY, popup);
+			if(interact.didSomething())
+				stamina-=5000;
+		}else{
+			popup.setPopup(2);
+		}
+	}
+
+	public void interactRight(Popup popup){
+		if(stamina >=  8500){
+			interact.right(boardIndexX, boardIndexY, popup);
+			if(interact.didSomething())
+				stamina-=5000;
+		}else{
+			popup.setPopup(2);
+		}
+	}
+
+	public void interactLeft(Popup popup){
+		if(stamina >=  8500){
+			interact.left(boardIndexX, boardIndexY, popup);
+			if(interact.didSomething())
+				stamina-=5000;
+		}else{
+			popup.setPopup(2);
+		}
+	}
+	
 	public int getBoardIndexX() {
 		return boardIndexX;
 	}
@@ -293,13 +351,13 @@ public class Player {
 	}
 	
 	public void setBoardIndexX(int index) {
-		boardIndexX = index;
+		 boardIndexX = index;
 	}
 
 	public void setBoardIndexY(int index) {
 		boardIndexY = index;
 	}
-
+	
 	public boolean foundPath(){
 		return foundPath;
 	}
@@ -342,6 +400,10 @@ public class Player {
 	
 	public void sectionChangeProcessed(){
 		changeSection = false;
+	}
+	
+	public int getStamina(){
+		return stamina;
 	}
 	
 	public Bitmap getBitmap(){

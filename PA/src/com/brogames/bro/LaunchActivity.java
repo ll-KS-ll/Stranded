@@ -22,11 +22,11 @@ public class LaunchActivity extends GameActivity {
 		bundle.putInt("hunger", settings.getInt("hunger", 0));
 		bundle.putInt("thirst", settings.getInt("thirst", 0));
 		bundle.putInt("equip", settings.getInt("equip", -1));
+		bundle.putInt("stamina", settings.getInt("stamina", Player.MAX_STAMINA));
 		bundle.putString("bag", settings.getString("bag", ""));
 		bundle.putString("section", settings.getString("section", "0_0"));
 		bundle.putBoolean("first", settings.getBoolean("first", true));
-		bundle.putBoolean("menuIsOpen",
-				settings.getBoolean("menuIsOpen", false));
+		bundle.putBoolean("menuIsOpen", settings.getBoolean("menuIsOpen", false));
 
 		view = new LaunchView(this, bundle);
 		setContentView(view);
@@ -50,6 +50,7 @@ public class LaunchActivity extends GameActivity {
 		editor.putInt("hunger", view.getIntData("hunger"));
 		editor.putInt("thirst", view.getIntData("thirst"));
 		editor.putInt("equip", view.getIntData("equip"));
+		editor.putInt("stamina", view.getIntData("stamina"));
 		editor.putString("bag", view.getStringData("bag"));
 		editor.putString("section", view.getStringData("new_section"));
 		editor.commit();
