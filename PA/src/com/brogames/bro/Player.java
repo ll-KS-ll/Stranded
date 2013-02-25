@@ -34,11 +34,9 @@ public class Player {
 	private static final int playerHealthUpdateTime = 3000;
 	private boolean changeSection;
 	private Tile[][] objectLayer;
-	
 	private int stamina;
 	
 	public static final int MAX_STAMINA = 10000;
-	
 	public static final int DOWN = 0;
 	public static final int UP = 1;
 	public static final int RIGHT = 2;
@@ -195,12 +193,12 @@ public class Player {
 
 		// Stamina 
 		if(stamina < MAX_STAMINA){
-			if(stamina + timePassed <= MAX_STAMINA)
+			if(stamina + timePassed/10 <= MAX_STAMINA)
 				stamina += timePassed/10;
 			else
 				stamina = MAX_STAMINA;
 		}
-		
+			
 		lastMoved = System.currentTimeMillis();
 		
 		if (System.currentTimeMillis() - lastTimer > playerHealthUpdateTime) {
@@ -303,40 +301,40 @@ public class Player {
 	}
 	
 	public void interactUp(Popup popup){
-		if(stamina >=  8500){
+		if(stamina >=  4000){
 			interact.up(boardIndexX, boardIndexY, popup);
 			if(interact.didSomething())
-				stamina-=5000;
+				stamina-=4000;
 		}else{
 			popup.setPopup(2);
 		}
 	}
 	
 	public void interactDown(Popup popup){
-		if(stamina >=  8500){
+		if(stamina >=  4000){
 			interact.down(boardIndexX, boardIndexY, popup);
 			if(interact.didSomething())
-				stamina-=5000;
+				stamina-=4000;
 		}else{
 			popup.setPopup(2);
 		}
 	}
 
 	public void interactRight(Popup popup){
-		if(stamina >=  8500){
+		if(stamina >=  4000){
 			interact.right(boardIndexX, boardIndexY, popup);
 			if(interact.didSomething())
-				stamina-=5000;
+				stamina-=4000;
 		}else{
 			popup.setPopup(2);
 		}
 	}
 
 	public void interactLeft(Popup popup){
-		if(stamina >=  8500){
+		if(stamina >=  4000){
 			interact.left(boardIndexX, boardIndexY, popup);
 			if(interact.didSomething())
-				stamina-=5000;
+				stamina-=4000;
 		}else{
 			popup.setPopup(2);
 		}
