@@ -1,19 +1,20 @@
 package com.brogames.bro;
 
-import java.io.BufferedWriter;
 import java.util.StringTokenizer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
+
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Inventory;
 import com.brogames.bro.popups.Message;
-import com.brogames.bro.popups.PlayerPopup;
 import com.brogames.bro.popups.PickupNotification;
+import com.brogames.bro.popups.PlayerPopup;
 import com.core.ks.GameView;
 import com.core.ks.InputObject;
 
@@ -36,14 +37,19 @@ public class LaunchView extends GameView {
 	private Menu menu;
 	private Player player;
 	
+	// Constructor
 	public LaunchView(Context context) {
 		super(context);
-	}
 
-	// Constructor
-	public LaunchView(Context context, Bundle bundle) {
-		super(context);
-
+		Bundle bundle = new Bundle();
+		bundle.putInt("playerPosX", savedData.getInt("playerPosX", -1));
+		bundle.putInt("playerPosY", savedData.getInt("playerPosY", -1));
+		bundle.putInt("hunger", savedData.getInt("hunger", 0));
+		bundle.putInt("thirst", savedData.getInt("thirst", 0));
+		bundle.putInt("equip", savedData.getInt("equip", -1));
+		bundle.putInt("stamina", savedData.getInt("stamina", Player.MAX_STAMINA));
+		bundle.putString("bag", savedData.getString("bag", ""));
+		
 		tileWidth = TILE_WIDTH = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		tileHeight = TILE_HEIGHT = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
@@ -51,7 +57,7 @@ public class LaunchView extends GameView {
 
 		getImage = new ImageGetter(getResources());
 
-		current_section = new_section = bundle.getString("section");
+		current_section = new_section = savedData.getString("section", "0_0");
 		Map.loadMap(context, current_section);
 		layer = Map.getLayers();
 		backgroundLayer = layer[0].getTiles();
@@ -62,11 +68,11 @@ public class LaunchView extends GameView {
 		Bitmap menuSheet = BitmapFactory.decodeResource(getResources(), R.drawable.ui);
 		player = new Player(bmpChar, bundle, popup, objectLayer, topLayer);
 		camera = new Camera();
-		menu = new Menu(menuSheet, bundle.getInt("equip"));
+		menu = new Menu(menuSheet, savedData.getInt("equip", -1));
 		bmpChar.recycle();
 		menuSheet.recycle();
 
-		if (bundle.getBoolean("menuIsOpen"))
+		if (savedData.getBoolean("menuIsOpen", false))
 			menu.open();
 	}
 
@@ -204,39 +210,23 @@ public class LaunchView extends GameView {
 		}
 	}
 
-	public int getIntData(String key) {
-		if (key.equals("playerPosX"))
-			return player.getBoardIndexX();
-		if (key.equals("playerPosY"))
-			return player.getBoardIndexY();
-		if (key.equals("hunger"))
-			return player.getHunger();
-		if (key.equals("thirst"))
-			return player.getThirst();
-		if (key.equals("equip"))
-			return player.getBag().getIntData();
-		if (key.equals("stamina"))
-			return player.getStamina();
-		return -1;
+	@Override
+	public void save(SharedPreferences.Editor editor){
+		editor.putBoolean("first", false);
+		editor.putBoolean("menuIsOpen", menu.isOpen());
+		editor.putInt("playerPosX", player.getBoardIndexX());
+		editor.putInt("playerPosY", player.getBoardIndexY());
+		editor.putInt("hunger", player.getHunger());
+		editor.putInt("thirst", player.getThirst());
+		editor.putInt("equip", player.getBag().getIntData());
+		editor.putInt("stamina", player.getStamina());
+		editor.putString("bag", player.getBagStringData());
+		editor.putString("section", new_section);
+		saveFile("section" + current_section + ".tmx");
 	}
-
-	public String getStringData(String key) {
-		if (key.equals("bag"))
-			return player.getBagStringData();
-		if (key.equals("current_section"))
-			return current_section;
-		if (key.equals("new_section"))
-			return new_section;
-		return "";
-	}
-
-	public boolean getBooleanData(String key) {
-		if (key.equals("menuIsOpen"))
-			return menu.isOpen();
-		return false;
-	}
-
-	public void saveFile(BufferedWriter writer) {
+	
+	public void saveFile(String fileName) {
+		openFile(fileName);
 		for (int n = 0; n < 4; n++) {
 			try {
 				if (n > 0)
@@ -256,6 +246,7 @@ public class LaunchView extends GameView {
 			} catch (Exception ex) {
 			}
 		}
+		closeFile();
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.core.ks;
 
-import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.util.Log;
 
@@ -21,13 +20,13 @@ public class GameLoop implements Runnable {
 	public static final int LOOP = 1;
 	public static final int IDLE = 0;
 	public static final int RESTART = 2;
+	public static final int GAME_OVER = 3;
 	
 	public GameLoop(GameActivity gameactivity, GameView gameview) {
 		this.gameview = gameview;
 		this.gameactivity = gameactivity;
 	}
 
-	@SuppressLint("NewApi")
 	@Override
 	public void run() {
 		lastTime = System.nanoTime();
@@ -51,7 +50,7 @@ public class GameLoop implements Runnable {
 			case RESTART:
 				gameactivity.restart();
 				break;
-			case -1:
+			case GAME_OVER:
 				gameactivity.finish();
 				break;
 			}
@@ -126,8 +125,8 @@ public class GameLoop implements Runnable {
 			state = LOOP;
 		if(gameview.getState() == GameView.RESTART)
 			state = RESTART;
-		if(gameview.terminate())
-			state = -1;
+		if(gameview.getState() == GameView.GAME_OVER)
+			state = GAME_OVER;
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e) {
@@ -135,8 +134,8 @@ public class GameLoop implements Runnable {
 		}
 	}
 	
-	public boolean wasTerminated(){
-		if(state == -1)
+	public boolean isGameOver(){
+		if(state == GAME_OVER)
 			return true;
 		return false;
 	}

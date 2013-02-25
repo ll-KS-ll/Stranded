@@ -1,9 +1,8 @@
 package com.core.ks;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -12,21 +11,15 @@ public class GameActivity extends Activity {
 	protected GameView view = null;
 	protected Thread t = null;
 	protected GameLoop gameloop = null;
-	protected SharedPreferences settings;
-	protected SharedPreferences.Editor editor;
 	public static final String PATH = "GameScores";
-	private boolean wasTerminated = false;
-
+	private boolean isGameOver = false;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-		settings = getSharedPreferences(PATH, 0);
-		settings.edit().putBoolean("active", true).commit();
-		editor = settings.edit();
 	}
 
 	@Override
@@ -53,10 +46,9 @@ public class GameActivity extends Activity {
 		}
 		t = null;
 
-		if (gameloop.wasTerminated()) {
-			settings.edit().clear().commit();
-			wasTerminated = true;
-		}
+		if(gameloop.isGameOver())
+			isGameOver = true;
+		
 		gameloop = null;
 	}
 
@@ -68,16 +60,17 @@ public class GameActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		if(!wasTerminated)
-			save();
+		if(!isGameOver)
+			view.stop();
 	}
 
-	public void save(){}
-	
+	/**
+	 * Restarts the activity without any animation. 
+	 */
 	public void restart() {
 		Intent intent = getIntent();
 		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		save();
+		view.stop();
 		finish();
 		startActivity(intent);
 	}

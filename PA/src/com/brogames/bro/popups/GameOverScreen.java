@@ -16,6 +16,7 @@ public class GameOverScreen extends Popup{
 	public GameOverScreen(LaunchView lv){
 		super();
 		launchView = lv;
+		launchView.stop();
 	}
 	
 	@Override
@@ -46,6 +47,6 @@ public class GameOverScreen extends Popup{
 	public void processMotionEvent(InputObject input){
 		// Terminate the whole ducking game!
 		// It wanted to change the f-word to ducking
-		launchView.stop();
+		launchView.declareGameOver();
 	}
 }

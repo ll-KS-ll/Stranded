@@ -1,9 +1,14 @@
 package com.core.ks;
 
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,6 +26,7 @@ public class GameView extends SurfaceView {
 	public static final int RUNNING = 1;
 	public static final int STOP = 2;
 	public static final int RESTART = 3;
+	public static final int GAME_OVER = 4;
 	private int state = GameView.RUNNING;
 	// Input
 	private ArrayBlockingQueue<InputObject> inputQueue = new ArrayBlockingQueue<InputObject>(20);
@@ -29,6 +35,12 @@ public class GameView extends SurfaceView {
 	// Pop up
 	protected Popup popup;
 	private boolean popIsUp = false;
+	// New
+	protected SharedPreferences savedData;
+	private SharedPreferences.Editor editor;
+	private FileOutputStream outputStream;
+	private OutputStreamWriter outputStreamWriter;
+	protected BufferedWriter writer;
 	
 	public GameView(Context context) {
 		super(context);
@@ -38,6 +50,10 @@ public class GameView extends SurfaceView {
 		background.setColor(Color.BLACK);
 		popup = new Popup();
 		popup.close();
+		
+		savedData = context.getSharedPreferences(GameActivity.PATH, 0);
+		savedData.edit().putBoolean("active", true).commit();
+		editor = savedData.edit();
 	}
 
 	/** Update core logics*/
@@ -54,6 +70,8 @@ public class GameView extends SurfaceView {
 			processInput(); // Update inputs
 			break;
 		case RESTART:
+			break;
+		case GAME_OVER:
 			break;
 		}
 	}
@@ -93,7 +111,7 @@ public class GameView extends SurfaceView {
 	}
 	
 	/** This method should be overridden with the game's render.
-	 *  Here is where all graphics should be rendered and then shown
+	 *  Here is where all graphics should be rendered and then it's shown
 	 *  on screen. 
 	 * @param canvas - canvas graphics will be rendered on.
 	 */
@@ -174,9 +192,18 @@ public class GameView extends SurfaceView {
 	/** Resumes the game from paused state*/
 	public void resume(){state = RUNNING;}
 	/** Stops the game and quits*/
-	public void stop(){state = STOP;}
+	public void stop(){
+		state = STOP;
+		save(editor);
+		editor.commit();
+	}
 	/** Restarts the game*/
 	public void restart(){state = RESTART;}
+	/** Declare that the game has been lost and savings should reset.*/
+	public void declareGameOver(){
+		state = GAME_OVER;
+		editor.clear().commit();
+	}
 	
 	/** Get in which state the game is
 	 * 	<br>
@@ -184,46 +211,41 @@ public class GameView extends SurfaceView {
 	 *  @return Game state*/
 	public int getState(){return state;}
 	
-	
-	/** public boolean terminate()
-	 * 	<br>
-	 *  Check if the game should be terminated.
-	 *  @return true if game should be terminated else false*/
-	public boolean terminate(){
-		if(state == STOP)
-			return true;
-		return false;
-	}
-	
-	
-	/** public int getIntData(String key)
-	 * 	<br>
-	 *  Get integer values to save
-	 *  @param key - key for the value to save
-	 *  @return value to save*/
-	public int getIntData(String key){return -1;}
-	
-	
-	/** public String getStringData(String key)
-	 * 	<br>
-	 *  Get string values to save
-	 *  @param key - key for the value to save
-	 *  @return value to save*/
-	public String getStringData(String key){return "";}
-	
-	
-	/** public int getBooleanData(String key)<p>
-	 * 	<br>
-	 *  Get booleans to save
-	 *  @param key - key for the value to save
-	 *  @return value to save*/
-	public boolean getBooleanData(String key){return false;}
-	
+	/** Save primitive data like integers, strings and booleans.
+	 * 
+	 * @param editor - editor to put values in
+	 */
+	public void save(SharedPreferences.Editor editor){}
 	
 	/** Save the data to an file that can be loaded when application restarts
 	 * 
 	 * @param writer - A BufferedWriter to write data to an file
 	 */
-	public void saveFile(BufferedWriter writer){}
+	public void saveFile(String fileName){}
+	
+	/** Closing the file. Should be called after data has been saved to a file*/
+	public void closeFile(){
+		try {
+			writer.close();
+			outputStreamWriter.close();
+			outputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** Opens a file to save to. <br>
+	 *  Don't forget to close file afterwards with closeFile();
+	 * @param fileName - name of the file.
+	 */
+	public void openFile(String fileName){
+		try {
+			outputStream = getContext().openFileOutput(fileName, Context.MODE_PRIVATE);
+			outputStreamWriter = new OutputStreamWriter(outputStream);
+			writer = new BufferedWriter(outputStreamWriter);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
