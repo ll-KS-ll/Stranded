@@ -3,7 +3,6 @@ package com.brogames.bro;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-import com.brogames.bro.objecttypes.ObjectHandler;
 import com.brogames.bro.objecttypes.items.Item;
 import com.core.ks.InputObject;
 import com.core.ks.Popup;
@@ -15,45 +14,68 @@ public class Menu {
 	private Bitmap[] thirst = new Bitmap[4];
 	private Bitmap background, bag;
 	private Bitmap buttonUp, buttonDown;
-	private Bitmap map, notes;
-	private Bitmap bmpEquip;
-	private int tileWidth, tileHeight, width;
 	private int hungerIndex = 0, thirstIndex = 0;
 	private String message;
 	private int offset;
 	
+	private final int slots = LaunchView.SCREEN_WIDTH / LaunchView.TILE_WIDTH;
+	private MenuSlot[] menu = new MenuSlot[slots];
+	private final int MENU_BUTTON = slots - 1;
+	private int EQUIP = 2, HUNGER = slots - 2, THIRST = slots - 3,
+			MAP = slots - 5, NOTES = slots - 6;
+
 	public Menu(Bitmap bmp, int equipType) {
 		int tw = LaunchView.TILE_WIDTH;
 		int th = LaunchView.TILE_HEIGHT;
 		isOpen = false;
-		Item equip = ObjectHandler.setItem(equipType);
-		if(equip != null)
-			bmpEquip = equip.getBmp();
 		
+		// Initialize menu slots
+		for (int n = 0; n < menu.length; n++)
+			menu[n] = new MenuSlot(n);
+
+		// Images
 		background = Bitmap.createBitmap(bmp, tw, th * 4, tw, th);
-		bag = Bitmap.createBitmap(bmp, tw * 0, th * 0, tw * 2, th * 3);
-		
 		buttonUp = Bitmap.createBitmap(bmp, tw * 0, th * 3, tw, th);
 		buttonDown = Bitmap.createBitmap(bmp, tw, th * 3, tw, th);
-
-		map = Bitmap.createBitmap(bmp, tw * 2, th * 3, tw, th);
-		notes = Bitmap.createBitmap(bmp, tw * 3, th * 3, tw, th);
-
 		for (int n = 0; n < hunger.length; n++)
 			hunger[n] = Bitmap.createBitmap(bmp, tw * (n + 2), th * 0, tw, th);
 
 		for (int n = 0; n < thirst.length; n++)
 			thirst[n] = Bitmap.createBitmap(bmp, tw * (n + 2), th * 2, tw, th);
-
-		// New code
-		if(LaunchView.SCREEN_WIDTH / tw > 10)
+		bag = Bitmap.createBitmap(bmp, tw * 0, th * 0, tw * 2, th * 3);
+		
+		// Offset
+		if (LaunchView.SCREEN_WIDTH / tw > 10)
 			offset = 1;
 		else
 			offset = 0;
+
+		setupItems();
+		addItems(bmp);
+	}
+
+	private void setupItems() {
+		EQUIP += offset;
+		HUNGER -= offset;
+		THIRST -= offset;
+		MAP -= offset;
+		NOTES -= offset;
+	}
+
+	private void addItems(Bitmap bmp) {
+		int tw = LaunchView.TILE_WIDTH;
+		int th = LaunchView.TILE_HEIGHT;
 		
-		
-		tileWidth = tw;
-		tileHeight = th;
+		// Map
+		menu[MAP].add(Bitmap.createBitmap(bmp, tw * 2, th * 3, tw, th));
+		// Note
+		menu[NOTES].add(Bitmap.createBitmap(bmp, tw * 3, th * 3, tw, th));
+		// Hunger
+		menu[HUNGER].add(hunger[0]);
+		// Thirst
+		menu[THIRST].add(thirst[0]);
+		// Button up
+		menu[MENU_BUTTON].add(buttonUp);
 	}
 
 	public void tick(Item equip, int hunger, int thirst) {
@@ -82,47 +104,36 @@ public class Menu {
 			thirstIndex = 2;
 		else
 			thirstIndex = 3;
-		
-		if(equip != null)
-			bmpEquip = equip.getBmp();
-		else
-			bmpEquip = null;
+
+		if (equip != null) {
+			menu[EQUIP].add(equip.getBmp());
+		} else
+			menu[EQUIP].remove();
 	}
 
 	public void render(Canvas canvas) {
-		int top = canvas.getHeight() - tileHeight;
-		width = canvas.getWidth();
-
 		if (isOpen) {
-			for (int n = 0; n <= canvas.getWidth(); n += tileWidth)
-				canvas.drawBitmap(background, n, top, null);
-
-			canvas.drawBitmap(buttonDown, width - tileWidth, top, null);
-			canvas.drawBitmap(hunger[hungerIndex], width - tileWidth * (2+offset), top, null);
-			canvas.drawBitmap(thirst[thirstIndex], width - tileWidth * (3+offset), top, null);
-			canvas.drawBitmap(map, width - tileWidth * (5+offset), top, null);
-			canvas.drawBitmap(notes, width - tileWidth * (6+offset), top, null);
-			canvas.drawBitmap(bag, 0, top - tileHeight * 2, null);
-			
-			if(bmpEquip != null)
-				canvas.drawBitmap(bmpEquip, tileWidth*(2+offset), top, null);
-			
+			for (int n = 0; n < slots; n++)
+				menu[n].draw(canvas);
+			canvas.drawBitmap(bag, 0, canvas.getHeight()
+					- LaunchView.TILE_HEIGHT * 3, null);
 		} else {
-			canvas.drawBitmap(buttonUp, width - tileWidth, top, null);
+			menu[MENU_BUTTON].draw(canvas);
 		}
 	}
 
 	public void processInput(InputObject input, Popup popup) {
-		
+
 		// Right down button
-		if (width - input.x < tileWidth)
+		if (menu[MENU_BUTTON].wasClicked(input))
 			close();
+
 		// Bag
-		if (input.x < tileWidth * 2)
+		if (input.x < LaunchView.TILE_WIDTH * 2)
 			popup.setPopup(6);
 
 		// Hunger icon
-		if (input.x > width - tileWidth * (2+offset) && input.x < width - tileWidth *(1+offset)) {
+		if (menu[HUNGER].wasClicked(input)) {
 			switch (hungerIndex) {
 			case 0:
 				message = "I'm not hungry at all.";
@@ -152,9 +163,9 @@ public class Menu {
 			}
 			popup.setPopup(5);
 		}
-		
+
 		// Thirst icon
-		if (input.x > width - tileWidth*(3+offset) && input.x < width - tileWidth*(2+offset)) {
+		if (menu[THIRST].wasClicked(input)) {
 			switch (thirstIndex) {
 			case 0:
 				message = "I'm not thirsty all.";
@@ -172,39 +183,76 @@ public class Menu {
 			popup.setPopup(5);
 		}
 
-		
 		// Map icon
-		if (input.x > width - tileWidth * (5+offset) && input.x < width - tileWidth*(4+offset)) {
+		if (menu[MAP].wasClicked(input)) {
 			message = "I haven't discovered anything yet.";
 			popup.setPopup(5);
 		}
-		
+
 		// Notes icon
-		if (input.x > width - tileWidth * (6+offset) && input.x < width - tileWidth*(5+offset)) {
+		if (menu[NOTES].wasClicked(input)) {
 			message = "I haven't made any notes yet.";
 			popup.setPopup(5);
 		}
-		
+
 		// Equip icon
-		if (bmpEquip != null && input.x > tileWidth * (2+offset) && input.x < tileWidth*(3+offset)) {
+		if (menu[EQUIP].wasClicked(input)) {
 			message = "This is what I've equipped to use.";
 			popup.setPopup(5);
 		}
 	}
 
-	public String getMessage(){
+	public String getMessage() {
 		return message;
 	}
-	
+
 	public void open() {
 		isOpen = true;
+		menu[MENU_BUTTON].add(buttonDown);
 	}
 
 	public void close() {
 		isOpen = false;
+		menu[MENU_BUTTON].add(buttonUp);
 	}
 
 	public boolean isOpen() {
 		return isOpen;
+	}
+
+	private class MenuSlot {
+
+		private Bitmap bmp;
+		private boolean isSomething = false;
+		private int left, top, right;
+
+		public MenuSlot(int index) {
+			left = LaunchView.TILE_WIDTH * index;
+			top = LaunchView.SCREEN_HEIGHT - LaunchView.TILE_HEIGHT;
+			right = left + LaunchView.TILE_WIDTH;
+		}
+
+		public void add(Bitmap bitmap) {
+			bmp = bitmap;
+			isSomething = true;
+		}
+
+		public void remove() {
+			bmp = null;
+			isSomething = false;
+		}
+
+		public void draw(Canvas canvas) {
+			if (isOpen())
+				canvas.drawBitmap(background, left, top, null);
+			if (isSomething)
+				canvas.drawBitmap(bmp, left, top, null);
+		}
+
+		public boolean wasClicked(InputObject input) {
+			if (input.x > left && input.x < right && isSomething)
+				return true;
+			return false;
+		}
 	}
 }
