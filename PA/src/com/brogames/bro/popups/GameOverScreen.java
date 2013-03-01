@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 
+// Hack way
 public class GameOverScreen extends Popup{
 
 	LaunchView launchView;
@@ -16,7 +17,6 @@ public class GameOverScreen extends Popup{
 	public GameOverScreen(LaunchView lv){
 		super();
 		launchView = lv;
-		launchView.stop();
 	}
 	
 	@Override
@@ -26,9 +26,10 @@ public class GameOverScreen extends Popup{
 	
 	@Override
 	public void render(Canvas canvas){
-		super.render(canvas);
+		launchView.stop();
+		
 		Paint color = new Paint();
-		color.setARGB(150, 0, 0, 0);
+		color.setARGB(207, 0, 0, 0);
 		canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), color);
 		
 		Paint text = new Paint();
@@ -45,8 +46,6 @@ public class GameOverScreen extends Popup{
 	
 	@Override
 	public void processMotionEvent(InputObject input){
-		// Terminate the whole ducking game!
-		// It wanted to change the f-word to ducking
 		launchView.declareGameOver();
 	}
 }

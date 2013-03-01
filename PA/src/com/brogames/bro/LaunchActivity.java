@@ -3,7 +3,6 @@ package com.brogames.bro;
 import android.os.Bundle;
 
 import com.core.ks.GameActivity;
-import com.core.ks.GameLoop;
 
 public class LaunchActivity extends GameActivity {
 
@@ -13,7 +12,6 @@ public class LaunchActivity extends GameActivity {
 
 		view = new LaunchView(this);
 		setContentView(view);
-		gameloop = new GameLoop(this, view);
 	}
 
 }

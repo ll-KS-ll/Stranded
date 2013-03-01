@@ -122,7 +122,7 @@ public class Menu {
 			popup.setPopup(6);
 
 		// Hunger icon
-		if (input.x > width - tileWidth * 2 && input.x < width - tileWidth) {
+		if (input.x > width - tileWidth * (2+offset) && input.x < width - tileWidth *(1+offset)) {
 			switch (hungerIndex) {
 			case 0:
 				message = "I'm not hungry at all.";
@@ -154,7 +154,7 @@ public class Menu {
 		}
 		
 		// Thirst icon
-		if (input.x > width - tileWidth*3 && input.x < width - tileWidth*2) {
+		if (input.x > width - tileWidth*(3+offset) && input.x < width - tileWidth*(2+offset)) {
 			switch (thirstIndex) {
 			case 0:
 				message = "I'm not thirsty all.";
@@ -174,19 +174,19 @@ public class Menu {
 
 		
 		// Map icon
-		if (input.x > width - tileWidth * 5 && input.x < width - tileWidth*4) {
+		if (input.x > width - tileWidth * (5+offset) && input.x < width - tileWidth*(4+offset)) {
 			message = "I haven't discovered anything yet.";
 			popup.setPopup(5);
 		}
 		
 		// Notes icon
-		if (input.x > width - tileWidth * 6 && input.x < width - tileWidth*5) {
+		if (input.x > width - tileWidth * (6+offset) && input.x < width - tileWidth*(5+offset)) {
 			message = "I haven't made any notes yet.";
 			popup.setPopup(5);
 		}
 		
-		// Notes icon
-		if (input.x > tileWidth * 3 && input.x < tileWidth*4) {
+		// Equip icon
+		if (bmpEquip != null && input.x > tileWidth * (2+offset) && input.x < tileWidth*(3+offset)) {
 			message = "This is what I've equipped to use.";
 			popup.setPopup(5);
 		}

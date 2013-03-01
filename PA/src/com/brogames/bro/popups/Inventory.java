@@ -20,8 +20,7 @@ public class Inventory extends Popup {
 
 	// Core stuff
 	private int objWidth, objHeight;
-	private int x, y, rows, cols;
-	private float scale;
+	private int rows, cols;
 	private CraftSystem craftSys;
 	// Slots
 	private Slot[] slots = new Slot[25];
@@ -34,12 +33,11 @@ public class Inventory extends Popup {
 	private Tile tile;
 	private boolean craftIsPossible = false;
 	private boolean detachIsPossible = false;
-	private Bitmap bagBitmap, background;
-	private Canvas bagCanvas;
+	private Bitmap background;
 	// http://www.youtube.com/watch?v=Eq3CuMDXaPs
 
 	public Inventory(Resources res, Bag bag, Tile tile) {
-		super(); // Call super or die!
+		super();
 
 		objWidth = 2 * tileWidth;
 		objHeight = 2 * tileHeight;
@@ -64,15 +62,7 @@ public class Inventory extends Popup {
 			background = Bitmap.createBitmap(tempBmp, 0, 0, tempBmp.getWidth(), tempBmp.getHeight(), matrix, true);
 		}
 		
-		// Check if scaling down the bag to fit screen is necessary
-		if(tileWidth * rows > screenWidth || tileHeight * cols > screenHeight){
-			float temp = (float)screenHeight / (float)(tileHeight * cols);
-			scale = (float)screenWidth / (float)(tileWidth * rows);
-			if(temp < scale)
-				scale = temp;
-		}else{
-			scale = 1;
-		}
+		setSize(tileWidth * rows, tileHeight * cols);
 
 		// Set positions for bag slots
 		int q = 0;
@@ -106,43 +96,26 @@ public class Inventory extends Popup {
 		Bitmap normal = BitmapFactory.decodeResource(res, R.drawable.button_normal);
 		Bitmap pressed = BitmapFactory.decodeResource(res, R.drawable.button_pressed);
 		buttons = new BagButtons(normal, pressed, xText, yText);
-		
-		// Setup canvas and bitmap to paint bag on
-		bagBitmap = Bitmap.createBitmap(tileWidth*rows, tileHeight*cols, Bitmap.Config.ARGB_8888);
-		bagCanvas = new Canvas(bagBitmap);
-		bagCanvas.scale(scale, scale);
-		x = (int)(screenWidth - bagCanvas.getWidth()*scale) / 2;
-		y = (int)(screenHeight - bagCanvas.getHeight()*scale) / 2;
 	}
 
 	public void tick() {
 		buttons.tick();
 	}
 
-	public void render(Canvas canvas) {
-		super.render(canvas);
-		
+	public void draw(Canvas canvas) {
 		// Background
-		bagCanvas.drawBitmap(background, 0, 0, null);
+		canvas.drawBitmap(background, 0, 0, null);
 		// Slots
 		for (int n = 0; n < slots.length; n++)
-			slots[n].render(bagCanvas, bag.getStack(n));
+			slots[n].render(canvas, bag.getStack(n));
 		// Craft slots
 		for (int n = 0; n < craftSlots.length; n++)
-			craftSlots[n].render(bagCanvas);
+			craftSlots[n].render(canvas);
 		// Buttons
-		buttons.render(bagCanvas);
-
-		canvas.drawBitmap(bagBitmap, x, y, null);
+		buttons.render(canvas);
 	}
 
-	public void processMotionEvent(InputObject input) {
-		
-		// Transform input 
-		input.x /= scale;
-		input.y /= scale;
-		input.x -= x;
-		input.y -= y;
+	public void onClick(InputObject input) {
 		
 		// Slots
 		for (int n = 0; n < slots.length; n++) {
@@ -212,11 +185,6 @@ public class Inventory extends Popup {
 			}
 			
 		}
-		
-		if(input.x < 0 || input.x > tileWidth*rows)
-			close();
-		else if(input.y < 0 || input.y > tileHeight*cols)
-			close();
 	}
 
 	public void craft() {

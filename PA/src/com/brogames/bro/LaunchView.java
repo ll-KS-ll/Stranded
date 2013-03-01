@@ -41,6 +41,13 @@ public class LaunchView extends GameView {
 	public LaunchView(Context context) {
 		super(context);
 
+		tileWidth = TILE_WIDTH = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
+		tileHeight = TILE_HEIGHT = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
+		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
+		screenHeight = SCREEN_HEIGHT = getContext().getResources().getDisplayMetrics().heightPixels;
+		
+		getImage = new ImageGetter(getResources());
+		
 		Bundle bundle = new Bundle();
 		bundle.putInt("playerPosX", savedData.getInt("playerPosX", -1));
 		bundle.putInt("playerPosY", savedData.getInt("playerPosY", -1));
@@ -49,13 +56,6 @@ public class LaunchView extends GameView {
 		bundle.putInt("equip", savedData.getInt("equip", -1));
 		bundle.putInt("stamina", savedData.getInt("stamina", Player.MAX_STAMINA));
 		bundle.putString("bag", savedData.getString("bag", ""));
-		
-		tileWidth = TILE_WIDTH = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
-		tileHeight = TILE_HEIGHT = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
-		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
-		screenHeight = SCREEN_HEIGHT = getContext().getResources().getDisplayMetrics().heightPixels;
-
-		getImage = new ImageGetter(getResources());
 
 		current_section = new_section = savedData.getString("section", "0_0");
 		Map.loadMap(context, current_section);

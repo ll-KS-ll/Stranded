@@ -12,11 +12,11 @@ import android.graphics.Paint.Style;
 import android.graphics.Path;
 import android.graphics.RectF;
 
+// Made the hack way instead of the correct way.
 public class Message extends Popup{
 
-	private Paint paint = new Paint();
-	private Paint bg = new Paint();
-	private Paint border = new Paint();
+	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint bg = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private String msg;
 	private int screenWidth, screenHeight, rows = 0;
 	private float x1, x2, y1, y2, width;
@@ -27,14 +27,13 @@ public class Message extends Popup{
      
 	public Message(String message, int screenWidth, int screenHeight){
 		super();
+		
 		paint.setColor(Color.BLACK);
 		paint.setTextSize(40);
 		paint.setAntiAlias(true);
 		paint.setTextAlign(Align.LEFT);
-		
 		bg.setColor(Color.WHITE);
 		bg.setStyle(Style.FILL);
-		border.setColor(Color.BLACK);
 		
 		msg = message;
 		this.screenWidth = screenWidth;
@@ -79,18 +78,15 @@ public class Message extends Popup{
 	
 	@Override
 	public void tick() {
-		super.tick();
+
 	}
 
 	@Override
 	public void render(Canvas canvas) {
-		super.render(canvas);
-		
+		canvas.drawRect(0, 0, screenWidth, screenHeight, color);
 		//Frame around text
-			canvas.drawRoundRect(bounds, 50, 50, bg);
-			//canvas.drawOval(borderBounds, border);
-			//canvas.drawOval(bounds, bg);
-		canvas.drawPath(path, bg);// Triangle ;)
+		canvas.drawRoundRect(bounds, 50, 50, bg);
+		canvas.drawPath(path, bg); // Triangle ;)
 		//Maybe draw a talk bubble instead, that would be cool and the person who makes that possible is also cool! ^^
 		for (int i = 0; i < (rows+1); i++ )
 			if (textArray[rows-i] != null)
@@ -99,7 +95,6 @@ public class Message extends Popup{
 
 	@Override
 	public void processMotionEvent(InputObject input) {
-		super.processMotionEvent(input);
 		close();
 	}
 }

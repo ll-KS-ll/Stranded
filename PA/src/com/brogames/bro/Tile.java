@@ -16,7 +16,7 @@ public class Tile {
 	private TileObject object;
 	private boolean wayPoint = false, last = false;
 	private int tileWidth, tileHeight;
-	private Paint color = new Paint();
+	private Paint color = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 	public Tile(int objectType, int x, int y) {
 		object = ObjectHandler.setTileObject(objectType);

@@ -21,8 +21,7 @@ import com.core.ks.Popup;
 public class PlayerPopup extends Popup {
 
 	private int objWidth, objHeight;
-	private int x, y, rows, cols;
-	private float scale;
+	private int rows, cols;
 
 	private Slot[] slots = new Slot[9];
 	private int[] indexes = new int[9];
@@ -30,14 +29,13 @@ public class PlayerPopup extends Popup {
 	private Rect foodMeter, drinkMeter, foodValue, drinkValue;
 	private float xHunger, yHunger, xThirst, yThirst;
 	
-	private Bitmap bagBitmap, background;
-	private Canvas bagCanvas;
-	private Paint imageObserver = new Paint();
-	private Paint playerBackground = new Paint();
-	private Paint playerBackgroundFrame = new Paint();
-	private Paint meterFoodValue = new Paint();
-	private Paint meterDrinkValue = new Paint();
-	private Paint textStyle = new Paint();
+	private Bitmap background;
+	private Paint imageObserver = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+	private Paint playerBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint playerBackgroundFrame = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint meterFoodValue = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint meterDrinkValue = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint textStyle = new Paint(Paint.ANTI_ALIAS_FLAG);
 	private Matrix playerMatrix = new Matrix();
 	
 	public PlayerPopup(Resources res, Player player) {
@@ -48,19 +46,11 @@ public class PlayerPopup extends Popup {
 
 		this.player = player;
 
-		imageObserver.setFilterBitmap(true);
-		imageObserver.setAntiAlias(true);
-		
-		playerBackground.setAntiAlias(true);
 		playerBackground.setARGB(255, 112, 61, 20);
-		playerBackgroundFrame.setAntiAlias(true);
 		playerBackgroundFrame.setColor(Color.BLACK);
 		playerBackgroundFrame.setStyle(Style.STROKE);
-		meterFoodValue.setAntiAlias(true);
 		meterFoodValue.setARGB(180, 153, 204, 0);
-		meterDrinkValue.setAntiAlias(true);
 		meterDrinkValue.setARGB(180, 51, 181, 229);
-		textStyle.setAntiAlias(true);
 		textStyle.setColor(Color.BLACK);
 		textStyle.setTextSize(tileHeight/1.3f);
 		
@@ -78,29 +68,15 @@ public class PlayerPopup extends Popup {
 			matrix.setRotate(90);
 			background = Bitmap.createBitmap(tempBmp, 0, 0, tempBmp.getWidth(), tempBmp.getHeight(), matrix, true);
 		}
-
-		// Set scale
-		if (tileWidth * rows > screenWidth || tileHeight * cols > screenHeight) {
-			float temp = (float) screenHeight / (float) (tileHeight * cols);
-			scale = (float) screenWidth / (float) (tileWidth * rows);
-			if (temp < scale)
-				scale = temp;
-		} else {
-			scale = 1;
-		}
+		
+		// New
+		setSize(tileWidth * rows, tileHeight * cols);
 
 		// Set slots
 		setSlots();
 
-		// Canvas and bitmap to render graphics on
-		bagBitmap = Bitmap.createBitmap(tileWidth * rows, tileHeight * cols, Bitmap.Config.ARGB_8888);
-		bagCanvas = new Canvas(bagBitmap);
-		bagCanvas.scale(scale, scale);
 		playerMatrix.postScale(3.5f, 3.5f);
 		playerMatrix.postTranslate(tileWidth, -tileHeight/1.5f);
-		
-		x = (int) (screenWidth - bagCanvas.getWidth() * scale) / 2;
-		y = (int) (screenHeight - bagCanvas.getHeight() * scale) / 2;
 		
 		if (screenWidth > screenHeight) {
 			// Landscape
@@ -150,35 +126,34 @@ public class PlayerPopup extends Popup {
 		}
 	}
 
-	public void render(Canvas canvas) {
-		super.render(canvas);
-
+	
+	// New
+	public void draw(Canvas canvas){
 		// Background
-		bagCanvas.drawBitmap(background, 0, 0, imageObserver);
-		
+		canvas.drawBitmap(background, 0, 0, imageObserver);
+				
 		// Slots
 		for (int n = 0; n < slots.length; n++)
-			slots[n].render(bagCanvas, player.getBag().getStack(indexes[n]));
+			slots[n].render(canvas, player.getBag().getStack(indexes[n]));
 
 		// Player
-		bagCanvas.drawRect(tileWidth, tileHeight, tileWidth*4.5f, tileHeight*6, playerBackground);
-		bagCanvas.drawBitmap(player.getBitmap(), playerMatrix, imageObserver);
-		bagCanvas.drawRect(tileWidth, tileHeight, tileWidth*4.5f, tileHeight*6, playerBackgroundFrame);
-		
+		canvas.drawRect(tileWidth, tileHeight, tileWidth*4.5f, tileHeight*6, playerBackground);
+		canvas.drawBitmap(player.getBitmap(), playerMatrix, imageObserver);
+		canvas.drawRect(tileWidth, tileHeight, tileWidth*4.5f, tileHeight*6, playerBackgroundFrame);
+				
 		//Meters 
-		bagCanvas.drawRect(foodMeter, playerBackground);
-		bagCanvas.drawRect(foodValue, meterFoodValue);
-		bagCanvas.drawRect(foodMeter, playerBackgroundFrame);
-		bagCanvas.drawText("Hunger", xHunger, yHunger, textStyle); // Text
-		bagCanvas.drawRect(drinkMeter, playerBackground);
-		bagCanvas.drawRect(drinkValue, meterDrinkValue);
-		bagCanvas.drawRect(drinkMeter, playerBackgroundFrame);
-		bagCanvas.drawText("Thirst", xThirst, yThirst, textStyle); // Text
-		
-		
-		canvas.drawBitmap(bagBitmap, x, y, imageObserver);
+		canvas.drawRect(foodMeter, playerBackground);
+		canvas.drawRect(foodValue, meterFoodValue);
+		canvas.drawRect(foodMeter, playerBackgroundFrame);
+		canvas.drawText("Hunger", xHunger, yHunger, textStyle); // Text
+		canvas.drawRect(drinkMeter, playerBackground);
+		canvas.drawRect(drinkValue, meterDrinkValue);
+		canvas.drawRect(drinkMeter, playerBackgroundFrame);
+		canvas.drawText("Thirst", xThirst, yThirst, textStyle); // Text
+				
 	}
-
+	
+	/*
 	public void processMotionEvent(InputObject input) {
 
 		// Transform input
@@ -215,6 +190,34 @@ public class PlayerPopup extends Popup {
 			close();
 		else if(input.y < 0 || input.y > tileHeight*cols)
 			close();
+	}
+	*/
+	
+	// New
+	public void onClick(InputObject input){
+		// Slots
+		for (int n = 0; n < slots.length; n++) {
+			if (slots[n].wasPressed(input)) {
+				if (!slots[n].isUsed() && n < player.getBag().getUniqueItemsCount()) {
+					Item consumable = slots[n].getItem();
+					slots[n].setAsUnused();
+					if(consumable == null)
+						return;
+					if(consumable.getCategory() == Item.FOOD_AND_FLUID){
+						player.eat(consumable.getConsumeValue());
+						player.drink(consumable.getConsumeValue());
+					}else if(consumable.getCategory() == Item.FOOD){
+						player.eat(consumable.getConsumeValue());
+					}else if(consumable.getCategory() == Item.FLUID){
+						player.drink(consumable.getConsumeValue());
+					}
+					if(player.getBag().getStack(indexes[n]) == 1)
+						slots[n].removeItem();
+					player.getBag().removeItem(indexes[n]);
+					setSlots();
+				}
+			}
+		}
 	}
 	
 	public void setSlots(){

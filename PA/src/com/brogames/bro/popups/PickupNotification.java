@@ -14,16 +14,16 @@ import com.core.ks.Popup;
 
 public class PickupNotification extends Popup {
 	
-	private Paint paint = new Paint();
-	private Paint paintToast = new Paint();
-	private Paint paintText = new Paint();
-	private Paint paintFrame = new Paint();
-	private Paint imageObserver = new Paint();
-	private int x, y;
+	private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint paintToast = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint paintText = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint paintFrame = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint imageObserver = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+	private int imgX, imgY;
 	private long lastTimer;
 	private Matrix matrix;
 	private Bitmap bmp;
-	private float scale;
+	private static final float scale = 1.3f;
 	private RectF toast, itemBackground;
 	private int timeVisible = 1500;
 	
@@ -31,52 +31,46 @@ public class PickupNotification extends Popup {
 		super();
 		
 		// Full transparency 
-		color.setARGB(0, 0, 0, 0);
+		setFullTransparency(true);
 		
 		// Text
-		paintText.setAntiAlias(true);
 		paintText.setTextSize(tileHeight/2.1f);
 		// Background
-		paintToast.setAntiAlias(true);
 		paintToast.setARGB(255, 112, 61, 20);
 		// Frames
-		paintFrame.setAntiAlias(true);
 		paintFrame.setColor(Color.BLACK);
 		paintFrame.setStyle(Style.STROKE);
 		// Item background
-		paint.setAntiAlias(true);
 		paint.setARGB(255, 250, 250, 250);
-		// Bitmap observer
-		imageObserver.setAntiAlias(true);
-		imageObserver.setFilterBitmap(true);
 		
 		// Item image
 		bmp = item.getBmp();
+
+		setSize(tileWidth*6, (int)(tileHeight*scale)+2*tileHeight/8);
+		setLocation(x, screenHeight-tileHeight*4+(int)(tileHeight*scale));
 		
 		// Image properties
-		x = screenWidth/2 - tileWidth*3  + tileWidth/10;
-		y = (int) (3*screenHeight/4 + (tileHeight*(scale+0.2F) - tileHeight*scale)/2);
-		scale = 1.3F;
+		imgX = tileWidth/8;
+		imgY = tileHeight/8;
 		
 		// Scaling and translate
 		matrix = new Matrix();
 		matrix.postScale(scale, scale);
-		matrix.postTranslate(x, y);
+		matrix.postTranslate(imgX, imgY);
 		
 		// Boundaries
-		toast = new RectF(screenWidth/2 - tileWidth*3, 3*screenHeight/4, screenWidth/2 + tileWidth*3, 3*screenHeight/4 + tileHeight*(scale+0.2F));
-		itemBackground = new RectF(x, y, x + tileWidth*scale, y + tileHeight*scale);
+		toast = new RectF(0, 0, width, height);
+		itemBackground = new RectF(imgX, imgY, imgX + tileWidth*scale, imgY + tileHeight*scale);
 		
 		lastTimer = System.currentTimeMillis();
 	}
 
 	public void tick() {
 		if (System.currentTimeMillis() - lastTimer > timeVisible)
-				close();
+			close();
 	}
 
-	public void render(Canvas canvas) {
-		super.render(canvas);
+	public void draw(Canvas canvas) {
 		// Background
 		canvas.drawRoundRect(toast, tileWidth/10, tileHeight/10, paintToast);
 		canvas.drawRoundRect(toast, tileWidth/10, tileHeight/10, paintFrame);
@@ -84,13 +78,14 @@ public class PickupNotification extends Popup {
 		canvas.drawRoundRect(itemBackground, tileWidth/10, tileHeight/10, paint);
 		canvas.drawRoundRect(itemBackground, tileWidth/10, tileHeight/10, paintFrame);
 		// Text
-		canvas.drawText("You got a new item!", x + tileWidth*(scale+0.2F), y + tileHeight/1.2f, paintText);
+		canvas.drawText("You got a new item!", imgX + tileWidth*(scale+0.2F), imgY + tileHeight/1.2f, paintText);
 		// Image
 		canvas.drawBitmap(bmp, matrix, imageObserver);
 	}
 	
-	public void processMotionEvent(InputObject input) {
+	public void onClick(InputObject input) {
 		close();
+		setPopup(6);
 	}
 
 }
