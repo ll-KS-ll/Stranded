@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:entries="@array/orientation_text"
+        android:entryValues="@array/orientation_values"
+        android:key="orientation"
+        android:summary="Change the screen orientation for the game"
+        android:defaultValue="auto"
+        android:title="Orientation" />
+
+    <CheckBoxPreference
+        android:key="sound"
+        android:summary="Turn music on or off."
+        android:title="Sound"
+        android:summaryOn="There are sounds in the game"
+        android:summaryOff="The game is silent"
+        android:defaultValue="true" />
+
+</PreferenceScreen>

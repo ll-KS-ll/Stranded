@@ -2,7 +2,12 @@
 
     <color name="stranded_color">#502909</color>
     
-    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+    <style name="Theme.Stranded.NoTitleBar.Fullscreen" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@color/stranded_color</item>
+        <item name="android:colorBackground">@color/stranded_color</item>
+    </style>
+    
+    <style name="Theme.Stranded" parent="android:Theme.Holo">
         <item name="android:windowBackground">@color/stranded_color</item>
         <item name="android:colorBackground">@color/stranded_color</item>
     </style>

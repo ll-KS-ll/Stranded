@@ -5,9 +5,11 @@ import com.brogames.bro.R;
 import com.core.ks.GameActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Paint;
 //import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,6 +27,15 @@ public class StartMenu extends Activity implements OnClickListener{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String orientation = prefs.getString("orientation", "auto");
+		
+		if(orientation.equals("landscape")){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		}else if(orientation.equals("portrait")){
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		}
+		
 		setContentView(R.layout.start_menu);
 		
 		start = (Button) findViewById(R.id.bStart);
@@ -39,13 +50,11 @@ public class StartMenu extends Activity implements OnClickListener{
 		exit.setTypeface(font);*/
 		
 		score.setEnabled(false);
-		options.setEnabled(false);
 		score.setPaintFlags(score.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-		options.setPaintFlags(options.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 		
 		start.setOnClickListener(this);
 		//score.setOnClickListener(this);
-		//options.setOnClickListener(this);
+		options.setOnClickListener(this);
 		exit.setOnClickListener(this);
 	}
 
@@ -71,7 +80,7 @@ public class StartMenu extends Activity implements OnClickListener{
 			startActivity(openScore);
 			break;
 		case R.id.bOptions:
-			Intent openOptions = new Intent("com.brogames.bro.OPTIONS");
+			Intent openOptions = new Intent("com.brogames.bro.SETTINGS");
 			startActivity(openOptions);
 			break;
 		case R.id.bExit:
