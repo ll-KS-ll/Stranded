@@ -4,11 +4,13 @@ import java.util.StringTokenizer;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import com.brogames.bro.popups.GameOverScreen;
 import com.brogames.bro.popups.Inventory;
@@ -40,11 +42,14 @@ public class LaunchView extends GameView {
 	// Constructor
 	public LaunchView(Context context) {
 		super(context);
-
+		
 		tileWidth = TILE_WIDTH = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		tileHeight = TILE_HEIGHT = Math.round(32.0f * getContext().getResources().getDisplayMetrics().density);
 		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
 		screenHeight = SCREEN_HEIGHT = getContext().getResources().getDisplayMetrics().heightPixels;
+
+		if(savedData.getBoolean("first", true))
+			savedData.edit().putLong("start_time", System.currentTimeMillis()).commit();
 		
 		getImage = new ImageGetter(getResources());
 		
@@ -200,6 +205,7 @@ public class LaunchView extends GameView {
 			popup = new GameOverScreen(this);
 			if (!player.readyToMove())
 				player.stop(objectLayer);
+			handleGameOver();
 			break;
 		case 5: // Opens a message from Menu
 			popup = new Message(menu.getMessage(), getWidth(), getHeight());
@@ -247,6 +253,47 @@ public class LaunchView extends GameView {
 			}
 		}
 		closeFile();
+	}
+	
+	/** Wrap up things before game data rests.*/
+	public void handleGameOver(){
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+		final Editor editor = prefs.edit();
+
+		final long startTime = savedData.getLong("start_time", -1);
+		if(startTime < 1) // No score to calculate
+			return;
+		savedData.edit().putLong("start_time", 0).commit(); // reset 
+		final long endTime = System.currentTimeMillis();
+		final float time = endTime - startTime;
+		final int[] scores = new int[10];
+		
+		// Load old scores
+		for(int n=0; n<scores.length; n++){
+			scores[n] = prefs.getInt("score_" + n, -1);
+		}
+	
+		// If smallest score is less than this score add new score
+		if(scores[9] < time)
+			scores[9] = (int) time;
+		
+		// Sort the score list so highest score will be at the top
+		for(int i=0;i<scores.length-1;i++){
+			for(int n=i+1;n<scores.length;n++){
+				if(scores[i]<scores[n]){
+					int temp = scores[i];
+					scores[i] = scores[n];
+					scores[n] = temp;
+				}
+			}
+		}
+		
+		// Save new scores
+		for(int n=0; n<scores.length; n++){
+			editor.putInt("score_" + n, scores[n]);
+		}
+		
+		editor.commit();
 	}
 
 }

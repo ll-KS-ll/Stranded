@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
 import com.core.ks.GameActivity;
 
 public class LaunchActivity extends GameActivity {

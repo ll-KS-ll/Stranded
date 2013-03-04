@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">Stranded</string>
@@ -9,5 +10,8 @@
     <string name="new_game">New Game</string>
     <string name="imageview_descript">Error :(</string>
     <string name="developer_team">BRO Games</string>
+    <string name="title_activity_score">Score</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

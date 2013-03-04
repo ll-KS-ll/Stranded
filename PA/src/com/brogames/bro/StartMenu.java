@@ -1,20 +1,19 @@
 package com.brogames.bro;
 
 import android.app.Activity;
-import com.brogames.bro.R;
-import com.core.ks.GameActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Paint;
-//import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.core.ks.GameActivity;
+//import android.graphics.Typeface;
 
 public class StartMenu extends Activity implements OnClickListener{
 
@@ -49,11 +48,8 @@ public class StartMenu extends Activity implements OnClickListener{
 		options.setTypeface(font);
 		exit.setTypeface(font);*/
 		
-		score.setEnabled(false);
-		score.setPaintFlags(score.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-		
 		start.setOnClickListener(this);
-		//score.setOnClickListener(this);
+		score.setOnClickListener(this);
 		options.setOnClickListener(this);
 		exit.setOnClickListener(this);
 	}
