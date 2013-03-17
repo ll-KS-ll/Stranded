@@ -31,7 +31,7 @@ public class Player {
 	private Interact interact;
 	private int hunger, thirst;
 	private long lastTimer;
-	private static final int playerHealthUpdateTime = 3/*000*/;
+	private static final int playerHealthUpdateTime = 3000;
 	private boolean changeSection;
 	private Tile[][] objectLayer;
 	private int stamina;
@@ -102,10 +102,6 @@ public class Player {
 		this.hunger = bundle.getInt("hunger");
 		this.thirst = bundle.getInt("thirst");;
 		lastTimer = System.currentTimeMillis();
-		
-		// Debugging 
-			thirst = 9750;
-		// ---------
 		
 		changeSection = false;
 		
