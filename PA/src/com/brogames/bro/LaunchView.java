@@ -38,6 +38,7 @@ public class LaunchView extends GameView {
 	private Camera camera;
 	private Menu menu;
 	private Player player;
+	private long playedTime;
 	
 	// Constructor
 	public LaunchView(Context context) {
@@ -48,9 +49,6 @@ public class LaunchView extends GameView {
 		screenWidth = SCREEN_WIDTH = getContext().getResources().getDisplayMetrics().widthPixels;
 		screenHeight = SCREEN_HEIGHT = getContext().getResources().getDisplayMetrics().heightPixels;
 
-		if(savedData.getBoolean("first", true))
-			savedData.edit().putLong("start_time", System.currentTimeMillis()).commit();
-		
 		getImage = new ImageGetter(getResources());
 		
 		Bundle bundle = new Bundle();
@@ -77,6 +75,8 @@ public class LaunchView extends GameView {
 		bmpChar.recycle();
 		menuSheet.recycle();
 
+		playedTime = savedData.getLong("played_time", 0);
+		
 		if (savedData.getBoolean("menuIsOpen", false))
 			menu.open();
 	}
@@ -112,6 +112,8 @@ public class LaunchView extends GameView {
 
 		if (!player.isAlive())
 			popup.setPopup(4);
+		else
+			playedTime+= 31.5;
 	}
 
 	// Draw graphics
@@ -228,6 +230,7 @@ public class LaunchView extends GameView {
 		editor.putInt("stamina", player.getStamina());
 		editor.putString("bag", player.getBagStringData());
 		editor.putString("section", new_section);
+		editor.putLong("played_time", playedTime);
 		saveFile("section" + current_section + ".tmx");
 	}
 	
@@ -255,19 +258,23 @@ public class LaunchView extends GameView {
 		closeFile();
 	}
 	
-	/** Wrap up things before game data rests.*/
+	/** Wrap up things before game data resets.*/
 	public void handleGameOver(){
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 		final Editor editor = prefs.edit();
 
-		final long startTime = savedData.getLong("start_time", -1);
-		if(startTime < 1) // No score to calculate
+		if(playedTime < 1) // No score to calculate
 			return;
-		savedData.edit().putLong("start_time", 0).commit(); // reset 
-		final long endTime = System.currentTimeMillis();
-		final float time = endTime - startTime;
-		final int[] scores = new int[10];
 		
+		final long endTime = System.currentTimeMillis();
+		final float time = endTime - playedTime;
+		
+		// reset 
+		savedData.edit().putLong("played_time", 0).commit(); 
+		playedTime = 0;
+		
+		
+		final int[] scores = new int[10];
 		// Load old scores
 		for(int n=0; n<scores.length; n++){
 			scores[n] = prefs.getInt("score_" + n, -1);
